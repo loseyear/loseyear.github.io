@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "Canvas API"
+tags: [canvas]
 ---
 
 

@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "Canvas Drawing shapes"
+tags: [canvas]
 ---
 
 # 栅格
