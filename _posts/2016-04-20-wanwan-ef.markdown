@@ -1,0 +1,99 @@
+---
+layout: post
+title:  "弯的否"
+date:   2016-04-20 10:10:10
+categories: wanwan
+tags: [wanwan]
+---
+
+这是一篇非正经前端开门指南，而并不是入门指南，或者说他是一个引子，真正前端的时间，还要你自己寻找。
+
+前端的基本组成部分是：HTML，CSS，JavaScript。
+在前端届有一个对 HTML 的趣味解读：'How To Make Love'；
+在前端届有一个对 HTML 5 的趣味解读：'How To Make Love With Five Fingers'；
+
+为什么这么突兀的写出 HTML 5 呢，因为他就是大家口中所说的 H5，实际上 HTML 5 只是 HTML 标准的一个版本，当然 H5 也是一个 HTML 标签，我们不讨论这种叫法的正确性，个人觉得只要利于传播，叫什么都无所谓；
+
+做一个形象的例子：
+ WEB 网页如果比喻成一个房子，那么 HTML 就是毛坯房，CSS 就是装修，写的好就是精装修，而 JavaScript 就是智能家居了；
+
+一个 标准的 HTML 网页大概像下面这样
+
+
+{% highlight html %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>弯的否</title>
+</head>
+<body>
+    <div class="wanwan" id="wanwan">wanwan</div>
+</body>
+</html>
+{% endhighlight %}
+
+实际上任何一个现代编辑器都可以自动生成这样一段代码，而且生成的更好。
+我们先从注释开始说
+在 HTML 中只有一种注释方法：
+
+DOCTYPE 是网页头，现在我们只用上面代码中给的情况就可以了，其他的不用管了
+两个 head 标签中间是 网页的头部，用来声明一些网页内容，标题，或者外部文件引入等
+link 标签是引入一个外部的 CSS 文件，也可以用 style 标签包裹，在网页内部书写，但是一般不推荐这么干，我们需要重复使用我们的 CSS 样式，就是一套装修可以放在多个房子里，多划算。
+
+两个 body 标签中间就是我们要写 HTML 的地方，HTML 就是一堆标签，常用的有 div，p，ul，ol，li，span，b，strong，em 等等等等。
+
+div 是最常用的 HTML 标签，建议初学者使用这个标签来构建她的网页
+
+script 标签中的 src 可以引入一个外部 JS 文件，也可以在标签内书写 JS 代码，如果使用了 src 引入外部文件，那么标签间代码将失效。
+
+了解了上面的基本能看懂一个网页了，下面我们来说它的装修
+
+上面的例子中，我么能看到在 div 标签里面有 class 和 id，这个就是 CSS 的选择器，是 HTML 标签和 CSS 样式之间的桥梁，当然 HTML 标签本身也是一座桥，但是我们并不能在上面建城堡，事实上我并不知道这个世界上存在一个可以建城堡的桥。
+
+下面是一个 CSS 代码片段：
+
+{% highlight css %}
+/*
+ * wan
+ */
+.wan {
+     // Positioning
+     display: block;
+     float:left;
+
+     // Box model
+     width: 250px;
+     height: 200px;
+     margin: 10px;
+     padding: 10px;
+
+     // Typographic
+     border: 10px solid #fff;
+     background: red;
+
+     // Visual
+     color: #000;
+     font: 14px/1.5 sans-serif;
+}
+{% endhighlight %}
+
+{% highlight css %}
+CSS 的注释方式
+块注释
+/* 写在这里的定义不会生效，不管你写几行 在遇到又面的标签之前，都不会
+ 即使我换行了，也没有问题
+*/
+行注释
+// 在左面这俩斜线后面的定义不会生效
+这一行就会生效，因为上面并不爱我
+{% endhighlight %}
+
+选择器 HTML 里面 用 class 和 id 做了例子，在 CSS 对应的就是 "." 和 "＃"，例子中我们用了 class 选择器，选择器有很多，我们暂时先了解这两个。
+
+在定义 CSS 样式中，有些属性我们通过它的单词就能分辨出意思，比如 width 就是宽，hei ght 就是高，bo rde r 就是边框，background 就是背景等等，因为我们只是开门教学，就不说那么多了。
+
+至于智能家居，那是另外一个世界，了解了上面这些，你就是一个 开门前端。
+上面说的这些都学会了（包含隐身，所有 HTML 标签以及 CSS 属性）那么恭喜你，你是一个很牛的切图仔，页面仔，美工，等等，但还不是前端，因为你还没有学 JavaScript 呢。
+
+默认禁止传播。
