@@ -5,5 +5,5 @@ baseurl: "" # the subpath of your site, e.g. /blog/
 # Build settings
 markdown: kramdown
 
-relative_permalinks: true
+# relative_permalinks: true
 permalink: pretty
