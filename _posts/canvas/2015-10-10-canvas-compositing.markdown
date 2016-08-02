@@ -1,13 +1,13 @@
 ---
 layout: post
-title:  "Canvas Compositing"
+title:  "Canvas 组合"
 category: canvas
 description: 胡言乱语而已，看看就好
 tags: [canvas]
 ---
 
 
-# 组合
+# 组合 Compositing
 之前的例子里面，我们总是将一个图形画在另一个之上，大多数情况下，这样是不够的。
 比如说，它这样受制于图形的绘制顺序。
 不过，我们可以利用 globalCompositeOperation 属性来改变这些做法。

@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Canvas Basic animations"
+title:  "Canvas 基本动画"
 category: canvas
 description: 胡言乱语而已，看看就好
 tags: [canvas]

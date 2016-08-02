@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Applying styles and colors"
+title:  "Canvas 图形上色"
 category: canvas
 description: 胡言乱语而已，看看就好
 tags: [canvas]

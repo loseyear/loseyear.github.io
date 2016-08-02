@@ -1,13 +1,13 @@
 ---
 layout: post
-title:  "Canvas Optimizing canvas"
+title:  "Canvas 的优化"
 category: canvas
 description: 胡言乱语而已，看看就好
 tags: [canvas]
 ---
 
 
-# canvas的优化
+# Canvas 的优化
 canvas 元素是众多广泛使用的网络2D图像渲染标准之一。
 它被广泛用于游戏及复杂的图像可视化中。
 然而，随着网站和应用将canvas画布推至极限，性能开始成为问题。

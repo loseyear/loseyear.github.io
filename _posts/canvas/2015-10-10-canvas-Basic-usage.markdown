@@ -1,13 +1,13 @@
 ---
 layout: post
-title:  "Canvas Basic usage"
+title:  "canvas 元素"
 category: canvas
 description: 胡言乱语而已，看看就好
 tags: [canvas]
 ---
 
 
-# canvas 元素
+# canvas 元素（Canvas Basic usage）
 
 {% highlight html %}
     <canvas id="tutoriad" width="300" height="150"></canvas>

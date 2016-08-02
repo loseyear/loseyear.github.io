@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Canvas Pixel manipulation with canvas"
+title:  "Canvas 像素操作"
 category: canvas
 description: 胡言乱语而已，看看就好
 tags: [canvas]

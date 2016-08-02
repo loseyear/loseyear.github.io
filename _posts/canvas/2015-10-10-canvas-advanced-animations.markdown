@@ -1,11 +1,11 @@
 ---
 layout: post
-title:  "Canvas Advanced animations"
+title:  "Canvas 高级动画"
 category: canvas
 tags: [canvas]
 ---
 
-# 高级动画
+# 高级动画 Canvas Advanced animations
 在上一章，我们制作了基本动画以及我们知道让物件移动的方式。
 在这一部份，我们将会对动作有更深入的了解以及会添加一些物理现像让我们的动画更高级。
 
