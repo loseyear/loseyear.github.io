@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>正则表达式!</title>
+  <meta name="description" content="            元字符      释义                  .      匹配任意一个单个的字符。              ^      取非              [ ]      字符集合开始 结束              ()      子表达式的开始 结束          ...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/jekyll/update/2015/08/14/Regex/">
+  <link rel="alternate" type="application/rss+xml" title="抠钉" href="/feed.xml" />
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">抠钉</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/me/">Me</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/tags/">Tags</a>
+          
+        
+          <a class="page-link" href="/canvas/">canvas</a>
+          <a class="page-link" href="/tips/">tips</a>
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">正则表达式!</h1>
+    <p class="post-meta">Aug 14, 2015</p>
+  </header>
+
+  <article class="post-content">
+    <table>
+  <thead>
+    <tr>
+      <th>元字符</th>
+      <th>释义</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>.</td>
+      <td>匹配任意一个单个的字符。</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td>取非</td>
+    </tr>
+    <tr>
+      <td>[ ]</td>
+      <td>字符集合开始 结束</td>
+    </tr>
+    <tr>
+      <td>()</td>
+      <td>子表达式的开始 结束</td>
+    </tr>
+    <tr>
+      <td>\d</td>
+      <td>任何一个数字字符（等价于[0-9])</td>
+    </tr>
+    <tr>
+      <td>\D</td>
+      <td>任何一个非数字字符（等价于[^0-9])</td>
+    </tr>
+    <tr>
+      <td>\w</td>
+      <td>任何一个字母数字字符(大小写均可)或下划线字符（等价于[a-zA-Z0-9_])</td>
+    </tr>
+    <tr>
+      <td>\W</td>
+      <td>任何一个非字母数字字符(大小写均可)或下划线字符（等价于[^a-zA-Z0-9_])</td>
+    </tr>
+    <tr>
+      <td>\s</td>
+      <td>任何一个空白字符(等价于[\f\n\r\t\v]) 不包含 [\b]</td>
+    </tr>
+    <tr>
+      <td>\S</td>
+      <td>任何一个非空白字符(等价于[\f\n\r\t\v]) 不包含 [\b]</td>
+    </tr>
+    <tr>
+      <td>+</td>
+      <td>匹配一个或多个字符(至少一个)</td>
+    </tr>
+    <tr>
+      <td>*</td>
+      <td>匹配零个或多个字符</td>
+    </tr>
+    <tr>
+      <td>?</td>
+      <td>只能匹配一个字符（或字符集合）的零次或一次出现</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>贪婪和懒惰元字符</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>贪婪型元字符</th>
+      <th>懒惰型元字符</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>*</td>
+      <td>*?</td>
+    </tr>
+    <tr>
+      <td>+</td>
+      <td>+?</td>
+    </tr>
+    <tr>
+      <td>{n,}</td>
+      <td>{n,}?</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>空白元字符</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>元字符</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>[\b]</td>
+      <td>回退 （并删除）一个字符（Backspace键）</td>
+    </tr>
+    <tr>
+      <td>\f</td>
+      <td>换页符</td>
+    </tr>
+    <tr>
+      <td>\n</td>
+      <td>换行符</td>
+    </tr>
+    <tr>
+      <td>\r</td>
+      <td>回车符</td>
+    </tr>
+    <tr>
+      <td>\t</td>
+      <td>制表符（Tab键）</td>
+    </tr>
+    <tr>
+      <td>\v</td>
+      <td>垂直制表符</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>位置匹配</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>元字符</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>\b</td>
+      <td>匹配一个单词的开始或结尾</td>
+    </tr>
+    <tr>
+      <td>^</td>
+      <td>定义字符串开头</td>
+    </tr>
+    <tr>
+      <td>$</td>
+      <td>定义字符串结尾</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>回溯引用匹配</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>元字符</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>\1</td>
+      <td>1即匹配第一个子表达式,类推</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>用来大小写转换的元字符</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>元字符</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>\E</td>
+      <td>结束 \L 或 \U 转换</td>
+    </tr>
+    <tr>
+      <td>\I</td>
+      <td>把下一个字符转换为小写</td>
+    </tr>
+    <tr>
+      <td>\L</td>
+      <td>把 \L 到 \E 之间的字符全部转换为小写</td>
+    </tr>
+    <tr>
+      <td>\u</td>
+      <td>把下一个字符转换为大写</td>
+    </tr>
+    <tr>
+      <td>\U</td>
+      <td>把 \U 到 \E 之间的字符全部转换为大写</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>\l 和 \u 只能把下一个字符（或子表达式）转换为小写或大写。\L 和 \U 将把它后面的所有字符串转换为小写或大写，直到遇上 \E 为止。</p>
+
+<p>前后查找</p>
+
+<p>. lookahead 向前查找
+. lookbehind 向后查找 (JavaScript) 不支持向后查找</p>
+
+<p>向前/后查找 匹配本身其实是有返回结果的，知识这个结果的字符长度永远是0而已。因此，前后查找操作有时也被称为零宽度（zero－width）匹配操作。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>元字符</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>?=</td>
+      <td>向前匹配</td>
+    </tr>
+    <tr>
+      <td>?&lt;=</td>
+      <td>向后匹配</td>
+    </tr>
+    <tr>
+      <td>(?=)</td>
+      <td>正向前查找</td>
+    </tr>
+    <tr>
+      <td>(?!)</td>
+      <td>负向前查找</td>
+    </tr>
+    <tr>
+      <td>(?&lt;=)</td>
+      <td>正向后查找</td>
+    </tr>
+    <tr>
+      <td>(?&lt;!)</td>
+      <td>负向后查找</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>回溯引用条件</p>
+
+<p>语法:(?(backreference) true-regex)</p>
+
+<p>grep</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>语法</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>-E</td>
+      <td>使用扩展正则表达式</td>
+    </tr>
+    <tr>
+      <td>-G</td>
+      <td>使用基本正则表达式</td>
+    </tr>
+    <tr>
+      <td>-P</td>
+      <td>使用 Perl 正则表达式</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>在默认的情况下，grep 将把包含着匹配的各个文本行全部显示出来；如果你只想查看匹配结果，请使用 -o 选项。</li>
+  <li>使用 -v 选项将对整个匹配操作进行求非 －－ 只显示不匹配的文本行。</li>
+  <li>使用 -c 选项将只显示匹配的总行数而不是次匹配的细节。</li>
+  <li>grep 工具职能用来进行搜索操作，不能用来进行替换操作。</li>
+</ul>
+
+<p>JavaScript</p>
+
+<ul>
+  <li>
+    <p>JavaScript 1.x 版本在 String 和 RegEx 对象的以下几个方法里实现了正则表达式处理。</p>
+
+    <ul>
+      <li>exce: 一个用来搜索一个匹配的 RegEx 方法。</li>
+      <li>match : 一个用来匹配一个字符串的 String 方法。</li>
+      <li>replace : 一个用来完成替换操作的 String 方法。</li>
+      <li>search : 一个用来测试在某给定字符串里是否存在着一个匹配的 String 方法。</li>
+      <li>split : 一个用来把字符串拆分为多个子串的 String 方法。</li>
+      <li>test : 一个用来测试在某给定字符串里是否存在着一个匹配的 RegEx 方法。</li>
+    </ul>
+  </li>
+  <li>
+    <p>JavaScript 对正则表达式的支持源自 Perl 语言，但需要注意以下几个问题。</p>
+    <ul>
+      <li>JavaScript 使用命令行选项来管理全局的区分大小写搜索： g 选项激活全局搜索功能，i 选项让匹配操作不区分字母的大小写，这两个选项可以组合为 gi。</li>
+      <li>其他命令行选项（版本4及以后的浏览器支持）包括：m，支持多行字符串；s，支持单行字符串；x，忽略正则表达式模式里的空白字符串。</li>
+      <li>在使用回溯引用的时候，$’ 将返回被匹配字符串前面的所有东西，$` 将返回被匹配字符串后面的所有东西， $+ 将返回最后一个被匹配的子表达式， $&amp; 将返回被匹配到的所有东西。</li>
+      <li>JavaScript 提供了一个名为 RegExp 的全局对象， 在执行完一个正则表达式之后，你们可以通过这个对象获得与这次执行有关的信息。</li>
+      <li>JavaScript 不支持 POSIX 字符串。</li>
+      <li>JavaScript 不支持 \A 和 \Z。</li>
+    </ul>
+  </li>
+</ul>
+
+<p>MySQL</p>
+
+<p>REGEXP “expression”</p>
+
+<ul>
+  <li>MySQL 正则表达式支持有很用，功能也很强大，但它还算不上是一个完备的正则表达式实现。
+    <ul>
+      <li>只提供了搜索支持，不支持使用正则表达式进行替换操作。</li>
+      <li>在默认的情况下，正则表达式嗖嗖不区分字母的大小写。如果需要区分字母的大小写，必须再增加一个 BINARY 关键字（放在 REGEXP 和模式之间)。</li>
+      <li>用 [[:&lt;]] 来匹配一个单词的开头， 用[[:&gt;]] 来匹配一个单词的结束。</li>
+      <li>不支持向前预测。</li>
+      <li>不支持嵌入条件。</li>
+      <li>不支持八进制字符搜索。</li>
+      <li>不支持 \a,\b,\e,\f,\v。</li>
+      <li>不支持回溯引用。</li>
+    </ul>
+  </li>
+</ul>
+
+<p>PHP</p>
+
+<ul>
+  <li>
+    <p>PHP 通过他的 PCRE 组建提供了与 Perl 相兼容的正则表达式支持。</p>
+
+    <ul>
+      <li>preg_grep() : 进行一次搜索，匹配结果将作为数组返回。</li>
+      <li>preg_match() : 进行一次正则表达式搜索，返回第一个匹配。</li>
+      <li>preg_match_all() : 进行一次正则表达式搜索，返回所有的匹配。</li>
+      <li>preg_quote() : 这个函数的输入参数是一个模式， 返回值是该模式的转义版本。</li>
+      <li>preg_replace() : 进行一次“搜索并替换”操作。</li>
+      <li>preg_replace_callback() : 进行一次“搜索并替换”操作，但使用一个回调（callback）函数来完成实际替换动作。</li>
+      <li>preg_split() : 把一个字符串拆分为子字符串。</li>
+    </ul>
+  </li>
+  <li>
+    <p>请注意一下事项。</p>
+    <ul>
+      <li>在默认的情况下，匹配操作不区分字母的大小写。如果不想区分字母的大小写，必须使用 i 限定符。</li>
+      <li>在默认的情况下，匹配操作仅限用于单行字符串。如果需要匹配多行字符串，必须使用 m 限定符。</li>
+      <li>preg_replace(), preg_replace_callback() 和 preg_split() 函数都支持一个可选的参数，该参数用来给出一个上限值－－对字符串进行替换或拆分的最大次数。</li>
+      <li>preg_replace(), 和 preg_replace_callback() 是从 PHP 4才开始有的，提他函数都是从 PHP 3 开始就被支持的。</li>
+      <li>在 PHP 4.0.4 和更高版本里，回溯引用可以用 Perl 语言的 $ 语法（例如 $1）来引用；在较早的版本里必须用 \ 来替代 $。</li>
+      <li>不支持 \l, \u, \L, \U, \Q 和 \v。</li>
+    </ul>
+  </li>
+</ul>
+
+<p>IP 地址</p>
+
+<ul>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>( ( (\d{1,2})</td>
+          <td>(1\d{2})</td>
+          <td>(2[0-4]\d)</td>
+          <td>(25[0-5]) ) .){3} ((\d{1,2})</td>
+          <td>(1\d{2})</td>
+          <td>(2[0-4]\d)</td>
+          <td>(25[0-5]) )</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+
+<p>URL 地址</p>
+
+<ul>
+  <li>https?://[-\w.]+(:\d+)?(/([\w/_.]*)?)?</li>
+</ul>
+
+<p>完整的 URL 地址</p>
+
+<ul>
+  <li>https?://(\w<em>:\w</em>@)?[-\w.]+(:\d+)?(/([\w/_.]*)(\?\S+)?)?)?</li>
+</ul>
+
+<p>电子邮件地址</p>
+
+<ul>
+  <li>(\w+.)*\w+@(\w+.)+[A-Za-z]+</li>
+</ul>
+
+<p>HTML注释</p>
+
+<ul>
+  <li>&lt;!-{2,}.*?-{2,}&gt;</li>
+</ul>
+
+<p>JavaScript注释
+* //.*</p>
+
+<p>基本的元字符</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>元字符</th>
+      <th>说明</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>.</td>
+      <td>匹配任意单个字符</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td> </td>
+      <td>逻辑或操作符</td>
+    </tr>
+    <tr>
+      <td>[]</td>
+      <td>匹配字符集合中的一个字符</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>[^]</td>
+      <td>对字符集合求非</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>-</td>
+      <td>定义一个区间(例如[A-Z])</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>\</td>
+      <td>对下一个字符转义</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>数量元字符</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>元字符</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>*</td>
+      <td>匹配前一个字符(子表达式)的零次或多次重复</td>
+    </tr>
+    <tr>
+      <td>*?</td>
+      <td>* 的懒惰型版本</td>
+    </tr>
+    <tr>
+      <td>+</td>
+      <td>匹配前一个字符(子表达式)的一次或多次重复</td>
+    </tr>
+    <tr>
+      <td>+?</td>
+      <td>+ 的懒惰型版本</td>
+    </tr>
+    <tr>
+      <td>?</td>
+      <td>匹配前一个字符(子表达式)的零次或多次重复</td>
+    </tr>
+    <tr>
+      <td>{n}</td>
+      <td>匹配前一个字符(子表达式)的n次重复</td>
+    </tr>
+    <tr>
+      <td>{m,n}</td>
+      <td>匹配前一个字符(子表达式)至少 m 次且至多 n 次重复</td>
+    </tr>
+    <tr>
+      <td>{n,}</td>
+      <td>匹配前一个字符(子表达式) n 次或更多次重复</td>
+    </tr>
+    <tr>
+      <td>{n,}?</td>
+      <td>{n,}的懒惰型版本</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>位置元字符</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>元字符</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>^</td>
+      <td>匹配字符串的开头</td>
+    </tr>
+    <tr>
+      <td>\A</td>
+      <td>匹配字符串的开头</td>
+    </tr>
+    <tr>
+      <td>$</td>
+      <td>匹配字符串的结束</td>
+    </tr>
+    <tr>
+      <td>\Z</td>
+      <td>匹配字符串的开头</td>
+    </tr>
+    <tr>
+      <td>&lt;</td>
+      <td>匹配单词的开头</td>
+    </tr>
+    <tr>
+      <td>&gt;</td>
+      <td>匹配单词的结束</td>
+    </tr>
+    <tr>
+      <td>\b</td>
+      <td>匹配单词边界(开头和结束)</td>
+    </tr>
+    <tr>
+      <td>\B</td>
+      <td>\b 的反义</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>特殊字符元字符</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>元字符</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>[\b]</td>
+      <td>退格字符</td>
+    </tr>
+    <tr>
+      <td>\c</td>
+      <td>匹配一个控制字符</td>
+    </tr>
+    <tr>
+      <td>\d</td>
+      <td>匹配任意数字字符</td>
+    </tr>
+    <tr>
+      <td>\D</td>
+      <td>\d 的反义</td>
+    </tr>
+    <tr>
+      <td>\f</td>
+      <td>换页符</td>
+    </tr>
+    <tr>
+      <td>\n</td>
+      <td>换行符</td>
+    </tr>
+    <tr>
+      <td>\r</td>
+      <td>回车符</td>
+    </tr>
+    <tr>
+      <td>\s</td>
+      <td>匹配一个空白字符</td>
+    </tr>
+    <tr>
+      <td>\S</td>
+      <td>\s 的反义</td>
+    </tr>
+    <tr>
+      <td>\t</td>
+      <td>制表符(Tab字符)</td>
+    </tr>
+    <tr>
+      <td>\v</td>
+      <td>垂直制表符</td>
+    </tr>
+    <tr>
+      <td>\w</td>
+      <td>匹配任意字母数字字符或下划线字符</td>
+    </tr>
+    <tr>
+      <td>\W</td>
+      <td>\w 的反义</td>
+    </tr>
+    <tr>
+      <td>\x</td>
+      <td>匹配一个十六进制数字</td>
+    </tr>
+    <tr>
+      <td>\0</td>
+      <td>匹配一个八进制数字</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>回溯引用和前后查找</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>元字符</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>()</td>
+      <td>定义一个子表达式</td>
+    </tr>
+    <tr>
+      <td>\1</td>
+      <td>匹配第1一个子表达式； \2代表第2个子表达式，依次类推</td>
+    </tr>
+    <tr>
+      <td>?=</td>
+      <td>向前查找</td>
+    </tr>
+    <tr>
+      <td>?&lt;=</td>
+      <td>向后查找</td>
+    </tr>
+    <tr>
+      <td>?!</td>
+      <td>负向前查找</td>
+    </tr>
+    <tr>
+      <td>?&lt;!</td>
+      <td>负向后查找</td>
+    </tr>
+    <tr>
+      <td>?()</td>
+      <td>条件(if then)</td>
+    </tr>
+    <tr>
+      <td>?()!</td>
+      <td>条件(if then else)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>大小写转换</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>元字符</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>\E</td>
+      <td>结束 \L 或 \U 转换</td>
+    </tr>
+    <tr>
+      <td>\l</td>
+      <td>把下一个字符转换为小写</td>
+    </tr>
+    <tr>
+      <td>\L</td>
+      <td>把后面的字符转换为小写，直到遇见 \E 为止</td>
+    </tr>
+    <tr>
+      <td>\u</td>
+      <td>把下一个字符转换为大写</td>
+    </tr>
+    <tr>
+      <td>\U</td>
+      <td>把后面的字符转换为大写，直到遇见 \E 为止</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>匹配模式</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>元字符</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>(?m)</td>
+      <td>分行匹配模式</td>
+    </tr>
+  </tbody>
+</table>
+
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+  </body>
+
+</html>

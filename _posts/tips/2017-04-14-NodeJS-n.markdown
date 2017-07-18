@@ -1,0 +1,17 @@
+---
+layout: post
+title:  "NodeJS 版本管理工具 n"
+category: tips
+description: 胡言乱语而已，看看就好
+tags: [tips]
+---
+
+{% highlight js %}
+npm install -g n
+n 6.1.0
+node -v
+v6.1.0
+n lts // 最新正式版
+n latest // 最新预览版
+{% endhighlight %}
+

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>数据库基本操作</title>
+  <meta name="description" content="MySQL On Command Line Tool">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="/mysql/2015/08/14/MySql/">
+  <link rel="alternate" type="application/rss+xml" title="抠钉" href="/feed.xml" />
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">抠钉</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/me/">Me</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/tags/">Tags</a>
+          
+        
+          <a class="page-link" href="/canvas/">canvas</a>
+          <a class="page-link" href="/tips/">tips</a>
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">数据库基本操作</h1>
+    <p class="post-meta">Aug 14, 2015</p>
+  </header>
+
+  <article class="post-content">
+    <h3 id="mysql-on-command-line-tool">MySQL On Command Line Tool</h3>
+
+<h5 id="section">链接命令</h5>
+<pre><code>mysql -h[主机地址] -P[端口] -u[用户名] -p［用户密码］
+</code></pre>
+
+<h4 id="section-1">创建数据库</h4>
+<pre><code>create database [数据库名];
+</code></pre>
+
+<h5 id="section-2">显示所有数据库</h5>
+<pre><code>show databases;
+</code></pre>
+
+<h4 id="section-3">打开数据库</h4>
+<pre><code>use [库名];
+</code></pre>
+
+<h4 id="section-4">当前选择数据库的状态</h4>
+<pre><code>select database();
+</code></pre>
+
+<h4 id="section-5">删除数据库</h4>
+<pre><code>drop database [数据库名];
+</code></pre>
+
+<h4 id="section-6">创建数据表</h4>
+<pre><code>CREATE TABLE [表名]([字段名][字段类型][字段要求][字段参数],...);
+</code></pre>
+
+<h4 id="section-7">显示所有数据表</h4>
+<pre><code>show tables;
+</code></pre>
+
+<h4 id="section-8">删除数据表</h4>
+<pre><code>drop table [数据表名];
+</code></pre>
+
+<h4 id="section-9">显示数据表字段</h4>
+<pre><code>describe [表名];
+</code></pre>
+
+<h4 id="section-10">更改表格</h4>
+
+<h6 id="section-11">添加字段</h6>
+<pre><code>alter table [表名] add [字段名] [类型]
+</code></pre>
+
+<h5 id="section-12">删除字段</h5>
+<pre><code>alter table [表名] drop column [字段名]
+</code></pre>
+
+<h5 id="section-13">更改字段</h5>
+<pre><code>-----------------alter table [表名] 
+</code></pre>
+
+<h4 id="section-14">显示当前表字段</h4>
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+  </body>
+
+</html>
