@@ -6,7 +6,8 @@ permalink: /tags/
 
 
 {% for category in site.tags %}
-  <a href="#{{ category | first }}">{{ category | first }}</a>({{ category | last | size }})
+  <a href="#{{ category | first }}">{{ category | first }}</a>
+    ({{ category | last | size }})
 {% endfor %}
 
 <div class="home">
@@ -26,4 +27,5 @@ permalink: /tags/
         </ul>
     {% endfor %}
 </div>
+
 
