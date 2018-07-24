@@ -10,8 +10,8 @@
   <meta name="description" content="  阅读 Canvas 笔记canvas mdn">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/canvas/2015/10/10/canvas-api/">
-  <link rel="alternate" type="application/rss+xml" title="抠钉" href="/feed.xml" />
+  <link rel="canonical" href="http://localhost:4000/canvas/2015/10/10/canvas-api/">
+  <link rel="alternate" type="application/rss+xml" title="抠钉" href="http://localhost:4000/feed.xml" />
 </head>
 
 
@@ -47,11 +47,14 @@
           
         
           
+        
+          
           <a class="page-link" href="/tags/">Tags</a>
           
         
           <a class="page-link" href="/canvas/">canvas</a>
           <a class="page-link" href="/tips/">tips</a>
+          <a class="page-link" href="/cli/">cli</a>
       </div>
     </nav>
 
@@ -123,13 +126,13 @@
 
 <h2 id="example">Example</h2>
 
-<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;canvas</span> <span class="na">id=</span><span class="s">&quot;canvas&quot;</span><span class="nt">&gt;&lt;/canvas&gt;</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-html" data-lang="html">    <span class="nt">&lt;canvas</span> <span class="na">id=</span><span class="s">"canvas"</span><span class="nt">&gt;&lt;/canvas&gt;</span></code></pre></figure>
 
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;canvas&quot;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;2d&quot;</span><span class="p">);</span>
+<figure class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"canvas"</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">"2d"</span><span class="p">);</span>
 
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;green&quot;</span><span class="p">;</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span></code></pre></div>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">"green"</span><span class="p">;</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span></code></pre></figure>
 
 
   </article>

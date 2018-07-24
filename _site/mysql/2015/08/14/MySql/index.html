@@ -7,11 +7,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>数据库基本操作</title>
-  <meta name="description" content="MySQL On Command Line Tool">
+  <meta name="description" content="###MySQL On Command Line Tool">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/mysql/2015/08/14/MySql/">
-  <link rel="alternate" type="application/rss+xml" title="抠钉" href="/feed.xml" />
+  <link rel="canonical" href="http://localhost:4000/mysql/2015/08/14/MySql/">
+  <link rel="alternate" type="application/rss+xml" title="抠钉" href="http://localhost:4000/feed.xml" />
 </head>
 
 
@@ -47,11 +47,14 @@
           
         
           
+        
+          
           <a class="page-link" href="/tags/">Tags</a>
           
         
           <a class="page-link" href="/canvas/">canvas</a>
           <a class="page-link" href="/tips/">tips</a>
+          <a class="page-link" href="/cli/">cli</a>
       </div>
     </nav>
 
@@ -70,63 +73,63 @@
   </header>
 
   <article class="post-content">
-    <h3 id="mysql-on-command-line-tool">MySQL On Command Line Tool</h3>
+    <p>###MySQL On Command Line Tool</p>
 
-<h5 id="section">链接命令</h5>
-<pre><code>mysql -h[主机地址] -P[端口] -u[用户名] -p［用户密码］
-</code></pre>
+<h5 id="链接命令">链接命令</h5>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql -h[主机地址] -P[端口] -u[用户名] -p［用户密码］
+</code></pre></div></div>
 
-<h4 id="section-1">创建数据库</h4>
-<pre><code>create database [数据库名];
-</code></pre>
+<h4 id="创建数据库">创建数据库</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>create database [数据库名];
+</code></pre></div></div>
 
-<h5 id="section-2">显示所有数据库</h5>
-<pre><code>show databases;
-</code></pre>
+<h5 id="显示所有数据库">显示所有数据库</h5>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>show databases;
+</code></pre></div></div>
 
-<h4 id="section-3">打开数据库</h4>
-<pre><code>use [库名];
-</code></pre>
+<h4 id="打开数据库">打开数据库</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use [库名];
+</code></pre></div></div>
 
-<h4 id="section-4">当前选择数据库的状态</h4>
-<pre><code>select database();
-</code></pre>
+<h4 id="当前选择数据库的状态">当前选择数据库的状态</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>select database();
+</code></pre></div></div>
 
-<h4 id="section-5">删除数据库</h4>
-<pre><code>drop database [数据库名];
-</code></pre>
+<h4 id="删除数据库">删除数据库</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>drop database [数据库名];
+</code></pre></div></div>
 
-<h4 id="section-6">创建数据表</h4>
-<pre><code>CREATE TABLE [表名]([字段名][字段类型][字段要求][字段参数],...);
-</code></pre>
+<h4 id="创建数据表">创建数据表</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE TABLE [表名]([字段名][字段类型][字段要求][字段参数],...);
+</code></pre></div></div>
 
-<h4 id="section-7">显示所有数据表</h4>
-<pre><code>show tables;
-</code></pre>
+<h4 id="显示所有数据表">显示所有数据表</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>show tables;
+</code></pre></div></div>
 
-<h4 id="section-8">删除数据表</h4>
-<pre><code>drop table [数据表名];
-</code></pre>
+<h4 id="删除数据表">删除数据表</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>drop table [数据表名];
+</code></pre></div></div>
 
-<h4 id="section-9">显示数据表字段</h4>
-<pre><code>describe [表名];
-</code></pre>
+<h4 id="显示数据表字段">显示数据表字段</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>describe [表名];
+</code></pre></div></div>
 
-<h4 id="section-10">更改表格</h4>
+<h4 id="更改表格">更改表格</h4>
 
-<h6 id="section-11">添加字段</h6>
-<pre><code>alter table [表名] add [字段名] [类型]
-</code></pre>
+<h6 id="添加字段">添加字段</h6>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>alter table [表名] add [字段名] [类型]
+</code></pre></div></div>
 
-<h5 id="section-12">删除字段</h5>
-<pre><code>alter table [表名] drop column [字段名]
-</code></pre>
+<h5 id="删除字段">删除字段</h5>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>alter table [表名] drop column [字段名]
+</code></pre></div></div>
 
-<h5 id="section-13">更改字段</h5>
-<pre><code>-----------------alter table [表名] 
-</code></pre>
+<h5 id="更改字段">更改字段</h5>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-----------------alter table [表名] 
+</code></pre></div></div>
 
-<h4 id="section-14">显示当前表字段</h4>
+<h4 id="显示当前表字段">显示当前表字段</h4>
 
   </article>
 

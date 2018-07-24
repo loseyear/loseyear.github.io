@@ -10,8 +10,8 @@
   <meta name="description" content="组合 Compositing之前的例子里面，我们总是将一个图形画在另一个之上，大多数情况下，这样是不够的。比如说，它这样受制于图形的绘制顺序。不过，我们可以利用 globalCompositeOperation 属性来改变这些做法。">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/canvas/2015/10/10/canvas-compositing/">
-  <link rel="alternate" type="application/rss+xml" title="抠钉" href="/feed.xml" />
+  <link rel="canonical" href="http://localhost:4000/canvas/2015/10/10/canvas-compositing/">
+  <link rel="alternate" type="application/rss+xml" title="抠钉" href="http://localhost:4000/feed.xml" />
 </head>
 
 
@@ -47,11 +47,14 @@
           
         
           
+        
+          
           <a class="page-link" href="/tags/">Tags</a>
           
         
           <a class="page-link" href="/canvas/">canvas</a>
           <a class="page-link" href="/tips/">tips</a>
+          <a class="page-link" href="/cli/">cli</a>
       </div>
     </nav>
 
@@ -70,17 +73,16 @@
   </header>
 
   <article class="post-content">
-    <h1 id="compositing">组合 Compositing</h1>
+    <h1 id="组合-compositing">组合 Compositing</h1>
 <p>之前的例子里面，我们总是将一个图形画在另一个之上，大多数情况下，这样是不够的。
 比如说，它这样受制于图形的绘制顺序。
 不过，我们可以利用 globalCompositeOperation 属性来改变这些做法。</p>
 
 <h1 id="globalcompositeoperation">globalCompositeOperation</h1>
-<p>我们不仅可以在已有图形后面再画新图形，还可以用来遮盖，清除（比 clearRect 方法强劲得多）某些区域。
-<code>js
-globalCompositeOperation = type
-</code>
-type 是下面 12 种字符串值之一：
+<p>我们不仅可以在已有图形后面再画新图形，还可以用来遮盖，清除（比 clearRect 方法强劲得多）某些区域。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">globalCompositeOperation</span> <span class="o">=</span> <span class="nx">type</span>
+</code></pre></div></div>
+<p>type 是下面 12 种字符串值之一：
 | type |   |
 | —- | - |
 | source-over (default) | 这是默认设置，新图形会覆盖在原有内容之上。 |
@@ -100,7 +102,7 @@ type 是下面 12 种字符串值之一：
   <p>注意：copy 和 darker 属性值在 Gecko 1.8 型的浏览器（Firefox 1.5 betas，等等）上暂时还无效。</p>
 </blockquote>
 
-<h1 id="clipping-paths">裁切路径 Clipping paths</h1>
+<h1 id="裁切路径-clipping-paths">裁切路径 Clipping paths</h1>
 <p>裁切路径和普通的 canvas 图形差不多，不同的是它的作用是遮罩，用来隐藏没有遮罩的部分。
 如右图所示。红边五角星就是裁切路径，所有在路径以外的部分都不会在 canvas 上绘制出来。</p>
 
@@ -110,12 +112,11 @@ type 是下面 12 种字符串值之一：
 
 <p>在 绘制图形 一章中，我只介绍了 stroke 和 fill 方法，这里介绍第三个方法 clip。</p>
 
-<p><code>js
-clip()
-</code>
-我们用 clip 方法来创建一个新的裁切路径。默认情况下，canvas 有一个与它自身一样大的裁切路径（也就是没有裁切效果）。
-## clip 的例子
-这个例子，我会用一个圆形的裁切路径来限制随机星星的绘制区域。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">clip</span><span class="p">()</span>
+</code></pre></div></div>
+<p>我们用 clip 方法来创建一个新的裁切路径。默认情况下，canvas 有一个与它自身一样大的裁切路径（也就是没有裁切效果）。</p>
+<h2 id="clip-的例子">clip 的例子</h2>
+<p>这个例子，我会用一个圆形的裁切路径来限制随机星星的绘制区域。</p>
 
 <p>首先，我画了一个与 canvas 一样大小的黑色方形作为背景，然后移动原点至中心点。
 然后用 clip 方法创建一个弧形的裁切路径。
@@ -126,53 +127,52 @@ clip()
 在画线性渐变时这个就更加明显了。
 然后在随机位置绘制 50 大小不一（经过缩放）的颗，当然也只有在裁切路径里面的星星才会绘制出来。</p>
 
-<p>```js
-function draw() {
-  var ctx = document.getElementById(‘canvas’).getContext(‘2d’);
-  ctx.fillRect(0,0,150,150);
-  ctx.translate(75,75);</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'canvas'</span><span class="p">).</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">150</span><span class="p">,</span><span class="mi">150</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="mi">75</span><span class="p">,</span><span class="mi">75</span><span class="p">);</span>
 
-<p>// Create a circular clipping path
-  ctx.beginPath();
-  ctx.arc(0,0,60,0,Math.PI*2,true);
-  ctx.clip();</p>
+  <span class="c1">// Create a circular clipping path</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">arc</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">clip</span><span class="p">();</span>
 
-<p>// draw background
-  var lingrad = ctx.createLinearGradient(0,-75,0,75);
-  lingrad.addColorStop(0, ‘#232256’);
-  lingrad.addColorStop(1, ‘#143778’);</p>
+  <span class="c1">// draw background</span>
+  <span class="kd">var</span> <span class="nx">lingrad</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">createLinearGradient</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">75</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">75</span><span class="p">);</span>
+  <span class="nx">lingrad</span><span class="p">.</span><span class="nx">addColorStop</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">'#232256'</span><span class="p">);</span>
+  <span class="nx">lingrad</span><span class="p">.</span><span class="nx">addColorStop</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'#143778'</span><span class="p">);</span>
+  
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="nx">lingrad</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="o">-</span><span class="mi">75</span><span class="p">,</span><span class="o">-</span><span class="mi">75</span><span class="p">,</span><span class="mi">150</span><span class="p">,</span><span class="mi">150</span><span class="p">);</span>
 
-<p>ctx.fillStyle = lingrad;
-  ctx.fillRect(-75,-75,150,150);</p>
-
-<p>// draw stars
-  for (var j=1;j&lt;50;j++){
-    ctx.save();
-    ctx.fillStyle = ‘#fff’;
-    ctx.translate(75-Math.floor(Math.random()<em>150),
-                  75-Math.floor(Math.random()</em>150));
-    drawStar(ctx,Math.floor(Math.random()*4)+2);
-    ctx.restore();
-  }</p>
-
-<p>}
-function drawStar(ctx,r){
-  ctx.save();
-  ctx.beginPath()
-  ctx.moveTo(r,0);
-  for (var i=0;i&lt;9;i++){
-    ctx.rotate(Math.PI/5);
-    if(i%2 == 0) {
-      ctx.lineTo((r/0.525731)*0.200811,0);
-    } else {
-      ctx.lineTo(r,0);
-    }
-  }
-  ctx.closePath();
-  ctx.fill();
-  ctx.restore();
-}
-```</p>
+  <span class="c1">// draw stars</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="nx">j</span><span class="o">&lt;</span><span class="mi">50</span><span class="p">;</span><span class="nx">j</span><span class="o">++</span><span class="p">){</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">save</span><span class="p">();</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s1">'#fff'</span><span class="p">;</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="mi">75</span><span class="o">-</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span><span class="o">*</span><span class="mi">150</span><span class="p">),</span>
+                  <span class="mi">75</span><span class="o">-</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span><span class="o">*</span><span class="mi">150</span><span class="p">));</span>
+    <span class="nx">drawStar</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span><span class="o">*</span><span class="mi">4</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="p">);</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">restore</span><span class="p">();</span>
+  <span class="p">}</span>
+  
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">drawStar</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="nx">r</span><span class="p">){</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">save</span><span class="p">();</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">()</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span><span class="nx">r</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="mi">9</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">rotate</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">/</span><span class="mi">5</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">i</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">ctx</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">((</span><span class="nx">r</span><span class="o">/</span><span class="mf">0.525731</span><span class="p">)</span><span class="o">*</span><span class="mf">0.200811</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">ctx</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">(</span><span class="nx">r</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">closePath</span><span class="p">();</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">restore</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 
   </article>

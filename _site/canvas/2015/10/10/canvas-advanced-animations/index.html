@@ -10,8 +10,8 @@
   <meta name="description" content="高级动画 Canvas Advanced animations在上一章，我们制作了基本动画以及我们知道让物件移动的方式。在这一部份，我们将会对动作有更深入的了解以及会添加一些物理现像让我们的动画更高级。">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/canvas/2015/10/10/canvas-advanced-animations/">
-  <link rel="alternate" type="application/rss+xml" title="抠钉" href="/feed.xml" />
+  <link rel="canonical" href="http://localhost:4000/canvas/2015/10/10/canvas-advanced-animations/">
+  <link rel="alternate" type="application/rss+xml" title="抠钉" href="http://localhost:4000/feed.xml" />
 </head>
 
 
@@ -47,11 +47,14 @@
           
         
           
+        
+          
           <a class="page-link" href="/tags/">Tags</a>
           
         
           <a class="page-link" href="/canvas/">canvas</a>
           <a class="page-link" href="/tips/">tips</a>
+          <a class="page-link" href="/cli/">cli</a>
       </div>
     </nav>
 
@@ -70,182 +73,175 @@
   </header>
 
   <article class="post-content">
-    <h1 id="canvas-advanced-animations">高级动画 Canvas Advanced animations</h1>
+    <h1 id="高级动画-canvas-advanced-animations">高级动画 Canvas Advanced animations</h1>
 <p>在上一章，我们制作了基本动画以及我们知道让物件移动的方式。
 在这一部份，我们将会对动作有更深入的了解以及会添加一些物理现像让我们的动画更高级。</p>
 
-<h1 id="section">绘制小球</h1>
-<p>我们将会画一个小球用于动画学习。好让他们先将球画在canvas（画布）上面。下面的代码会帮我们建立画布。
-```html</p>
-<canvas id="canvas" width="600" height="300"></canvas>
-<p><code>
-跟平常一样，我们需要先画一个context（画布场景），我们将会创建一个球对像，对像包括一些属性及将小球画在画布上的draw()函数。
-</code>js
-var canvas = document.getElementById(‘canvas’);
-var ctx = canvas.getContext(‘2d’);</p>
+<h1 id="绘制小球">绘制小球</h1>
+<p>我们将会画一个小球用于动画学习。好让他们先将球画在canvas（画布）上面。下面的代码会帮我们建立画布。</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;canvas</span> <span class="na">id=</span><span class="s">"canvas"</span> <span class="na">width=</span><span class="s">"600"</span> <span class="na">height=</span><span class="s">"300"</span><span class="nt">&gt;&lt;/canvas&gt;</span>
+</code></pre></div></div>
+<p>跟平常一样，我们需要先画一个context（画布场景），我们将会创建一个球对像，对像包括一些属性及将小球画在画布上的draw()函数。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'canvas'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
 
-<p>var ball = {
-  x: 100,
-  y: 100,
-  radius: 25,
-  color: ‘blue’,
-  draw: function() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2, true);
-    ctx.closePath();
-    ctx.fillStyle = this.color;
-    ctx.fill();
-  }
-};</p>
+<span class="kd">var</span> <span class="nx">ball</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">x</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+  <span class="na">y</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+  <span class="na">radius</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
+  <span class="na">color</span><span class="p">:</span> <span class="s1">'blue'</span><span class="p">,</span>
+  <span class="na">draw</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">arc</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">radius</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">closePath</span><span class="p">();</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">color</span><span class="p">;</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">};</span>
 
-<p>ball.draw();
-```
-这里并没有什么特别的。小球实际上是一个简单的圆形，是在arc()函数的帮助下画出来的。</p>
+<span class="nx">ball</span><span class="p">.</span><span class="nx">draw</span><span class="p">();</span>
+</code></pre></div></div>
+<p>这里并没有什么特别的。小球实际上是一个简单的圆形，是在arc()函数的帮助下画出来的。</p>
 
-<h1 id="section-1">添加速率</h1>
+<h1 id="添加速率">添加速率</h1>
 <p>现在我们有了一个小球，我们准备将添加一些基本动画，正如我们上一章学到的东西那些。
 再一次，window.requestAnimationFrame()帮助我们控制动画。
 小球依靠添加速率矢量进行移动。
-在每一帧里面，我们也用clear 清理掉之前帧里旧的圆形。
-```js
-var canvas = document.getElementById(‘canvas’);
-var ctx = canvas.getContext(‘2d’);
-var raf;</p>
+在每一帧里面，我们也用clear 清理掉之前帧里旧的圆形。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'canvas'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">raf</span><span class="p">;</span>
 
-<p>var ball = {
-  x: 100,
-  y: 100,
-  vx: 5,
-  vy: 2,
-  radius: 25,
-  color: ‘blue’,
-  draw: function() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2, true);
-    ctx.closePath();
-    ctx.fillStyle = this.color;
-    ctx.fill();
-  }
-};</p>
+<span class="kd">var</span> <span class="nx">ball</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">x</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+  <span class="na">y</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+  <span class="na">vx</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+  <span class="na">vy</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="na">radius</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
+  <span class="na">color</span><span class="p">:</span> <span class="s1">'blue'</span><span class="p">,</span>
+  <span class="na">draw</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">arc</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">radius</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">closePath</span><span class="p">();</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">color</span><span class="p">;</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">};</span>
 
-<p>function draw() {
-  ctx.clearRect(0,0, canvas.width, canvas.height);
-  ball.draw();
-  ball.x += ball.vx;
-  ball.y += ball.vy;
-  raf = window.requestAnimationFrame(draw);
-}</p>
+<span class="kd">function</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">clearRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
+  <span class="nx">ball</span><span class="p">.</span><span class="nx">draw</span><span class="p">();</span>
+  <span class="nx">ball</span><span class="p">.</span><span class="nx">x</span> <span class="o">+=</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">vx</span><span class="p">;</span>
+  <span class="nx">ball</span><span class="p">.</span><span class="nx">y</span> <span class="o">+=</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">vy</span><span class="p">;</span>
+  <span class="nx">raf</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">draw</span><span class="p">);</span>
+<span class="p">}</span>
 
-<p>canvas.addEventListener(‘mouseover’, function(e){
-  raf = window.requestAnimationFrame(draw);
-});</p>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'mouseover'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+  <span class="nx">raf</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">draw</span><span class="p">);</span>
+<span class="p">});</span>
 
-<p>canvas.addEventListener(“mouseout”,function(e){
-  window.cancelAnimationFrame(raf);
-});</p>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">"mouseout"</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">cancelAnimationFrame</span><span class="p">(</span><span class="nx">raf</span><span class="p">);</span>
+<span class="p">});</span>
 
-<p>ball.draw();
-```</p>
+<span class="nx">ball</span><span class="p">.</span><span class="nx">draw</span><span class="p">();</span>
+</code></pre></div></div>
 
-<h1 id="section-2">边界</h1>
+<h1 id="边界">边界</h1>
 <p>没有任何边界碰撞测试，我们的小球很快会超出画布。我们需要检查小球的x和y位置是否已经超出画布的尺寸，以及需要将速度矢量反转。处理这个的时候，我们添加下面的检查代码到draw函数中：</p>
 
-<p><code>js
-if (ball.y + ball.vy &gt; canvas.height || ball.y + ball.vy &lt; 0) {
-  ball.vy = -ball.vy;
-}
-if (ball.x + ball.vx &gt; canvas.width || ball.x + ball.vx &lt; 0) {
-  ball.vx = -ball.vx;
-}
-</code></p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="nx">ball</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">vy</span> <span class="o">&gt;</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">||</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">vy</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">ball</span><span class="p">.</span><span class="nx">vy</span> <span class="o">=</span> <span class="o">-</span><span class="nx">ball</span><span class="p">.</span><span class="nx">vy</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">ball</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">vx</span> <span class="o">&gt;</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">||</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">vx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">ball</span><span class="p">.</span><span class="nx">vx</span> <span class="o">=</span> <span class="o">-</span><span class="nx">ball</span><span class="p">.</span><span class="nx">vx</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
-<h1 id="section-3">加速</h1>
-<p>为了让动作更真实，你可以像这样处理速度，例如：
-<code>js
-ball.vy *= .99;
-ball.vy += .25;
-</code>
-这个会在逐帧减少速度，所以小球最终会在地板上弹跳。</p>
+<h1 id="加速">加速</h1>
+<p>为了让动作更真实，你可以像这样处理速度，例如：</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">ball</span><span class="p">.</span><span class="nx">vy</span> <span class="o">*=</span> <span class="p">.</span><span class="mi">99</span><span class="p">;</span>
+<span class="nx">ball</span><span class="p">.</span><span class="nx">vy</span> <span class="o">+=</span> <span class="p">.</span><span class="mi">25</span><span class="p">;</span>
+</code></pre></div></div>
+<p>这个会在逐帧减少速度，所以小球最终会在地板上弹跳。</p>
 
-<h1 id="section-4">长尾效果</h1>
+<h1 id="长尾效果">长尾效果</h1>
 <p>直到现在，我们已经使用clearRect 函数当我们清除前一帧动画。
-当你用一个半透明的fillRect函数取代这个函数的时候，你可以轻松获得长尾效果。
-<code>js
-ctx.fillStyle = 'rgba(255,255,255,0.3)';
-ctx.fillRect(0,0,canvas.width,canvas.height);
-</code></p>
+当你用一个半透明的fillRect函数取代这个函数的时候，你可以轻松获得长尾效果。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s1">'rgba(255,255,255,0.3)'</span><span class="p">;</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
+</code></pre></div></div>
 
-<h1 id="section-5">添加鼠标控制</h1>
+<h1 id="添加鼠标控制">添加鼠标控制</h1>
 <p>为了获得一些对小球的控制，例如，我们可以用 mousemove 事伯让它跟随我们的鼠标活动。
 click事件会释放小球以及让它重新弹跳起来。</p>
 
-<p>```js
-var canvas = document.getElementById(‘canvas’);
-var ctx = canvas.getContext(‘2d’);
-var raf;
-var running = false;</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'canvas'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">raf</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">running</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
 
-<p>var ball = {
-  x: 100,
-  y: 100,
-  vx: 5,
-  vy: 1,
-  radius: 25,
-  color: ‘blue’,
-  draw: function() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2, true);
-    ctx.closePath();
-    ctx.fillStyle = this.color;
-    ctx.fill();
-  }
-};</p>
+<span class="kd">var</span> <span class="nx">ball</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">x</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+  <span class="na">y</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+  <span class="na">vx</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+  <span class="na">vy</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="na">radius</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>
+  <span class="na">color</span><span class="p">:</span> <span class="s1">'blue'</span><span class="p">,</span>
+  <span class="na">draw</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">arc</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">radius</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">closePath</span><span class="p">();</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">color</span><span class="p">;</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">};</span>
 
-<p>function clear() {
-  ctx.fillStyle = ‘rgba(255,255,255,0.3)’;
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-}</p>
+<span class="kd">function</span> <span class="nx">clear</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s1">'rgba(255,255,255,0.3)'</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
+<span class="p">}</span>
 
-<p>function draw() {
-  clear();
-  ball.draw();
-  ball.x += ball.vx;
-  ball.y += ball.vy;</p>
+<span class="kd">function</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">clear</span><span class="p">();</span>
+  <span class="nx">ball</span><span class="p">.</span><span class="nx">draw</span><span class="p">();</span>
+  <span class="nx">ball</span><span class="p">.</span><span class="nx">x</span> <span class="o">+=</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">vx</span><span class="p">;</span>
+  <span class="nx">ball</span><span class="p">.</span><span class="nx">y</span> <span class="o">+=</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">vy</span><span class="p">;</span>
 
-<p>if (ball.y + ball.vy &gt; canvas.height || ball.y + ball.vy &lt; 0) {
-    ball.vy = -ball.vy;
-  }
-  if (ball.x + ball.vx &gt; canvas.width || ball.x + ball.vx &lt; 0) {
-    ball.vx = -ball.vx;
-  }</p>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">ball</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">vy</span> <span class="o">&gt;</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">||</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">vy</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">ball</span><span class="p">.</span><span class="nx">vy</span> <span class="o">=</span> <span class="o">-</span><span class="nx">ball</span><span class="p">.</span><span class="nx">vy</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">ball</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">vx</span> <span class="o">&gt;</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">||</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">ball</span><span class="p">.</span><span class="nx">vx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">ball</span><span class="p">.</span><span class="nx">vx</span> <span class="o">=</span> <span class="o">-</span><span class="nx">ball</span><span class="p">.</span><span class="nx">vx</span><span class="p">;</span>
+  <span class="p">}</span>
 
-<p>raf = window.requestAnimationFrame(draw);
-}</p>
+  <span class="nx">raf</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">draw</span><span class="p">);</span>
+<span class="p">}</span>
 
-<p>canvas.addEventListener(‘mousemove’, function(e){
-  if (!running) {
-    clear();
-    ball.x = e.clientX;
-    ball.y = e.clientY;
-    ball.draw();
-  }
-});</p>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'mousemove'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">running</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">clear</span><span class="p">();</span>
+    <span class="nx">ball</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">clientX</span><span class="p">;</span>
+    <span class="nx">ball</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">clientY</span><span class="p">;</span>
+    <span class="nx">ball</span><span class="p">.</span><span class="nx">draw</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">});</span>
 
-<p>canvas.addEventListener(“click”,function(e){
-  if (!running) {
-    raf = window.requestAnimationFrame(draw);
-    running = true;
-  }
-});</p>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">"click"</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">running</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">raf</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">draw</span><span class="p">);</span>
+    <span class="nx">running</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">});</span>
 
-<p>canvas.addEventListener(“mouseout”,function(e){
-  window.cancelAnimationFrame(raf);
-  running = false;
-});</p>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">"mouseout"</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">cancelAnimationFrame</span><span class="p">(</span><span class="nx">raf</span><span class="p">);</span>
+  <span class="nx">running</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">});</span>
 
-<p>ball.draw();
-```
-用你的鼠标移动小球，点击可以释放。</p>
+<span class="nx">ball</span><span class="p">.</span><span class="nx">draw</span><span class="p">();</span>
+</code></pre></div></div>
+<p>用你的鼠标移动小球，点击可以释放。</p>
 
   </article>
 

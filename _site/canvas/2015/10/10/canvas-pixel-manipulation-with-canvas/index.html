@@ -10,8 +10,8 @@
   <meta name="description" content="像素操作直到现在，我们仍然没了解画布的实际像素。通过ImageData对像，你可以读写一个数组以控制像素数据。我们也会去了解图片平滑（反锯齿）是如何被控制以及如何将图片保存在画布上。">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/canvas/2015/10/10/canvas-pixel-manipulation-with-canvas/">
-  <link rel="alternate" type="application/rss+xml" title="抠钉" href="/feed.xml" />
+  <link rel="canonical" href="http://localhost:4000/canvas/2015/10/10/canvas-pixel-manipulation-with-canvas/">
+  <link rel="alternate" type="application/rss+xml" title="抠钉" href="http://localhost:4000/feed.xml" />
 </head>
 
 
@@ -47,11 +47,14 @@
           
         
           
+        
+          
           <a class="page-link" href="/tags/">Tags</a>
           
         
           <a class="page-link" href="/canvas/">canvas</a>
           <a class="page-link" href="/tips/">tips</a>
+          <a class="page-link" href="/cli/">cli</a>
       </div>
     </nav>
 
@@ -70,10 +73,10 @@
   </header>
 
   <article class="post-content">
-    <h1 id="section">像素操作</h1>
+    <h1 id="像素操作">像素操作</h1>
 <p>直到现在，我们仍然没了解画布的实际像素。通过ImageData对像，你可以读写一个数组以控制像素数据。我们也会去了解图片平滑（反锯齿）是如何被控制以及如何将图片保存在画布上。</p>
 
-<h1 id="imagedata-">ImageData 对像</h1>
+<h1 id="imagedata-对像">ImageData 对像</h1>
 <p>ImageData对像代表一个画布对像的基础像素数据。它包含了一下只读属性：
 | - | - | 
 | - | - |
@@ -89,178 +92,169 @@
 
 <p>Uint8ClampedArray  包含高度 × 宽度 × 4 bytes数据，索引值从0到(高度×宽度×4)-1</p>
 
-<p>例如，从行50，纵200的像素中读取图片的蓝色部份，你会写以下代码：
-<code>js
-blueComponent = imageData.data[((50*(imageData.width*4)) + (200*4)) + 2];
-</code></p>
+<p>例如，从行50，纵200的像素中读取图片的蓝色部份，你会写以下代码：</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">blueComponent</span> <span class="o">=</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">[((</span><span class="mi">50</span><span class="o">*</span><span class="p">(</span><span class="nx">imageData</span><span class="p">.</span><span class="nx">width</span><span class="o">*</span><span class="mi">4</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="mi">200</span><span class="o">*</span><span class="mi">4</span><span class="p">))</span> <span class="o">+</span> <span class="mi">2</span><span class="p">];</span>
+</code></pre></div></div>
 
-<p>你可能用会使用Uint8ClampedArray.length属性来读取像素数组的大小（以bytes为单位）：
-<code>js
-var numBytes = imageData.data.length;
-</code></p>
+<p>你可能用会使用Uint8ClampedArray.length属性来读取像素数组的大小（以bytes为单位）：</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">numBytes</span> <span class="o">=</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+</code></pre></div></div>
 
-<h1 id="imagedata">创建一个ImageData对像</h1>
+<h1 id="创建一个imagedata对像">创建一个ImageData对像</h1>
 <p>去创建一个新的，空白的ImageData对像，你应该会使用createImageData() 方法。
-有2个版本的createImageData()方法。
-<code>js
-var myImageData = ctx.createImageData(width, height);
-</code>
-上面代码创建了一个新的具体特定尺寸的ImageData对像。所有像素被预设为透明黑。</p>
+有2个版本的createImageData()方法。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">myImageData</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">createImageData</span><span class="p">(</span><span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
+</code></pre></div></div>
+<p>上面代码创建了一个新的具体特定尺寸的ImageData对像。所有像素被预设为透明黑。</p>
 
 <p>你也可以创建一个被anotherImageData对像指定的相同像素的ImageData对像。
 这个新的对像像素全部被预设为透明黑。
 这个并非复制了图片数据。</p>
 
-<p><code>js
-var myImageData = ctx.createImageData(anotherImageData);
-</code></p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">myImageData</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">createImageData</span><span class="p">(</span><span class="nx">anotherImageData</span><span class="p">);</span>
+</code></pre></div></div>
 
-<h1 id="section-1">得到场景像素数据</h1>
-<p>为了获得一个包含画布场景像素数据的ImageData对像，你可以用getImageData()方法：
-<code>js
-var myImageData = ctx.getImageData(left, top, width, height);
-</code>
-这个方法会返回一个ImageData对像，它代表了画布区域的像素数据，
+<h1 id="得到场景像素数据">得到场景像素数据</h1>
+<p>为了获得一个包含画布场景像素数据的ImageData对像，你可以用getImageData()方法：</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">myImageData</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">getImageData</span><span class="p">(</span><span class="nx">left</span><span class="p">,</span> <span class="nx">top</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
+</code></pre></div></div>
+<p>这个方法会返回一个ImageData对像，它代表了画布区域的像素数据，
 此画布的四个角落分别表示为
 (left, top), (left + width, top), (left, top + height), 以及(left + width, top + height)四个点。
-这些坐标点被设定为画布坐标空间元素。
-&gt; 注：任何在画布以外的元素都会被返回成一个透明黑的ImageData对像。</p>
+这些坐标点被设定为画布坐标空间元素。</p>
+<blockquote>
+  <p>注：任何在画布以外的元素都会被返回成一个透明黑的ImageData对像。</p>
+</blockquote>
 
-<h1 id="section-2">颜色选择器</h1>
+<h1 id="颜色选择器">颜色选择器</h1>
 <p>在这个例子里面，我们会使用 getImageData() 去世展示鼠标光标下的颜色。
 为此，我们要当前鼠标的位置，记为 layerX 和 layerY，然后我们去查询 getImageData() 给我们提供的在那个位置的像数数组里面的像素数据。
-最后我们使用数组数据去设置背景颜色和 div 的文字去展示颜色值。
-<code>js
-var img = new Image();
-img.src = 'https://mdn.mozillademos.org/files/5397/rhino.jpg';
-var canvas = document.getElementById('canvas');
-var ctx = canvas.getContext('2d');
-img.onload = function() {
-  ctx.drawImage(img, 0, 0);
-  img.style.display = 'none';
-};
-var color = document.getElementById('color');
-function pick(event) {
-  var x = event.layerX;
-  var y = event.layerY;
-  var pixel = ctx.getImageData(x, y, 1, 1);
-  var data = pixel.data;
-  var rgba = 'rgba(' + data[0] + ',' + data[1] + ',' + data[2] + ',' + data[3] + ')';
-  color.style.background =  rgba;
-  color.textContent = rgba;
-}
-canvas.addEventListener('mousemove', pick);
-</code></p>
+最后我们使用数组数据去设置背景颜色和 div 的文字去展示颜色值。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">img</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">();</span>
+<span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s1">'https://mdn.mozillademos.org/files/5397/rhino.jpg'</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'canvas'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
+<span class="nx">img</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">img</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="nx">img</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">'none'</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="kd">var</span> <span class="nx">color</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'color'</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nx">pick</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">layerX</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">layerY</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">pixel</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">getImageData</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">pixel</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">rgba</span> <span class="o">=</span> <span class="s1">'rgba('</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s1">')'</span><span class="p">;</span>
+  <span class="nx">color</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">background</span> <span class="o">=</span>  <span class="nx">rgba</span><span class="p">;</span>
+  <span class="nx">color</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">rgba</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'mousemove'</span><span class="p">,</span> <span class="nx">pick</span><span class="p">);</span>
+</code></pre></div></div>
 
-<h1 id="section-3">在场景中写入像素数据</h1>
-<p>你可以用putImageData()方法去对场景进行像素数据的写入。
-<code>js
-ctx.putImageData(myImageData, dx, dy);
-</code>
-dx和dy参数表示你希望在场景内左上角绘制的像素数据所得到的设备坐标。</p>
+<h1 id="在场景中写入像素数据">在场景中写入像素数据</h1>
+<p>你可以用putImageData()方法去对场景进行像素数据的写入。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">ctx</span><span class="p">.</span><span class="nx">putImageData</span><span class="p">(</span><span class="nx">myImageData</span><span class="p">,</span> <span class="nx">dx</span><span class="p">,</span> <span class="nx">dy</span><span class="p">);</span>
+</code></pre></div></div>
+<p>dx和dy参数表示你希望在场景内左上角绘制的像素数据所得到的设备坐标。</p>
 
-<p>例如，为了在场景内左上角绘制myImageData代表的图片，你可以写如下的代码：
-<code>js
-ctx.putImageData(myImageData, 0, 0);
-</code></p>
+<p>例如，为了在场景内左上角绘制myImageData代表的图片，你可以写如下的代码：</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">ctx</span><span class="p">.</span><span class="nx">putImageData</span><span class="p">(</span><span class="nx">myImageData</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</code></pre></div></div>
 
-<h1 id="section-4">图片灰度和反相颜色</h1>
+<h1 id="图片灰度和反相颜色">图片灰度和反相颜色</h1>
 <p>在这个例子里，我们遍历所有像素以改变他们的数值。
 然后我们将被修改的像素数组通过 putImageData() 放回到画布中去。
 invert 函数仅仅是去减掉颜色的最大色值255.grayscale函数仅仅是用红绿和蓝的平均值。
-你也可以用加权平均，例如x = 0.299r + 0.587g + 0.114b这个公式。
-```js
-var img = new Image();
-img.src = ‘https://mdn.mozillademos.org/files/5397/rhino.jpg’;
-img.onload = function() {
-  draw(this);
-};</p>
+你也可以用加权平均，例如x = 0.299r + 0.587g + 0.114b这个公式。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">img</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">();</span>
+<span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s1">'https://mdn.mozillademos.org/files/5397/rhino.jpg'</span><span class="p">;</span>
+<span class="nx">img</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">draw</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="p">};</span>
 
-<p>function draw(img) {
-  var canvas = document.getElementById(‘canvas’);
-  var ctx = canvas.getContext(‘2d’);
-  ctx.drawImage(img, 0, 0);
-  img.style.display = ‘none’;
-  var imageData = ctx.getImageData(0,0,canvas.width, canvas.height);
-  var data = imageData.data;</p>
+<span class="kd">function</span> <span class="nx">draw</span><span class="p">(</span><span class="nx">img</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'canvas'</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">img</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="nx">img</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">'none'</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">imageData</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">getImageData</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+    
+  <span class="kd">var</span> <span class="nx">invert</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">+=</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>     <span class="o">=</span> <span class="mi">225</span> <span class="o">-</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>     <span class="c1">// red</span>
+      <span class="nx">data</span><span class="p">[</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">225</span> <span class="o">-</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span> <span class="c1">// green</span>
+      <span class="nx">data</span><span class="p">[</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">225</span> <span class="o">-</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">];</span> <span class="c1">// blue</span>
+    <span class="p">}</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">putImageData</span><span class="p">(</span><span class="nx">imageData</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="p">};</span>
 
-<p>var invert = function() {
-    for (var i = 0; i &lt; data.length; i += 4) {
-      data[i]     = 225 - data[i];     // red
-      data[i + 1] = 225 - data[i + 1]; // green
-      data[i + 2] = 225 - data[i + 2]; // blue
-    }
-    ctx.putImageData(imageData, 0, 0);
-  };</p>
+  <span class="kd">var</span> <span class="nx">grayscale</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">+=</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">avg</span> <span class="o">=</span> <span class="p">(</span><span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span> <span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span> <span class="o">+</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mi">3</span><span class="p">;</span>
+      <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>     <span class="o">=</span> <span class="nx">avg</span><span class="p">;</span> <span class="c1">// red</span>
+      <span class="nx">data</span><span class="p">[</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">avg</span><span class="p">;</span> <span class="c1">// green</span>
+      <span class="nx">data</span><span class="p">[</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nx">avg</span><span class="p">;</span> <span class="c1">// blue</span>
+    <span class="p">}</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">putImageData</span><span class="p">(</span><span class="nx">imageData</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="p">};</span>
 
-<p>var grayscale = function() {
-    for (var i = 0; i &lt; data.length; i += 4) {
-      var avg = (data[i] + data[i +1] + data[i +2]) / 3;
-      data[i]     = avg; // red
-      data[i + 1] = avg; // green
-      data[i + 2] = avg; // blue
-    }
-    ctx.putImageData(imageData, 0, 0);
-  };</p>
+  <span class="kd">var</span> <span class="nx">invertbtn</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'invertbtn'</span><span class="p">);</span>
+  <span class="nx">invertbtn</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span> <span class="nx">invert</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">grayscalebtn</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'grayscalebtn'</span><span class="p">);</span>
+  <span class="nx">grayscalebtn</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span> <span class="nx">grayscale</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
-<p>var invertbtn = document.getElementById(‘invertbtn’);
-  invertbtn.addEventListener(‘click’, invert);
-  var grayscalebtn = document.getElementById(‘grayscalebtn’);
-  grayscalebtn.addEventListener(‘click’, grayscale);
-}
-```</p>
-
-<h1 id="section-5">缩放和反锯齿</h1>
+<h1 id="缩放和反锯齿">缩放和反锯齿</h1>
 <p>在 drawImage() 方法， 第二个画布和 imageSmoothingEnabled
 属性的帮助下，我们可以放大显示我们的图片及看到详情内容。</p>
 
 <p>我们得到鼠标的位置并裁剪出距左和上5像素，距右和下5像素的图片。
 然后我们将这幅图复制到另一个画布然后将图片调整到我们想要的大小。
-在缩放画布里，我们将10×10像素的对原画布的裁剪调整为 200×200 。
-<code>js
-zoomctx.drawImage(canvas, Math.abs(x - 5), Math.abs(y - 5), 10, 10, 0, 0, 200, 200);
-</code>
-因为反锯齿默认是启用的，我们可能想要关闭它以看到清楚的像素。
-你可以通过切换勾选框来看到imageSmoothingEnabled属性的效果（不同浏览器需要不同前缀）。
-```js
-var img = new Image();
-img.src = ‘https://mdn.mozillademos.org/files/5397/rhino.jpg’;
-img.onload = function() {
-  draw(this);
-};</p>
+在缩放画布里，我们将10×10像素的对原画布的裁剪调整为 200×200 。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">zoomctx</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">canvas</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">x</span> <span class="o">-</span> <span class="mi">5</span><span class="p">),</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">y</span> <span class="o">-</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
+</code></pre></div></div>
+<p>因为反锯齿默认是启用的，我们可能想要关闭它以看到清楚的像素。
+你可以通过切换勾选框来看到imageSmoothingEnabled属性的效果（不同浏览器需要不同前缀）。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">img</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">();</span>
+<span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s1">'https://mdn.mozillademos.org/files/5397/rhino.jpg'</span><span class="p">;</span>
+<span class="nx">img</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">draw</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+<span class="p">};</span>
 
-<p>function draw(img) {
-  var canvas = document.getElementById(‘canvas’);
-  var ctx = canvas.getContext(‘2d’);
-  ctx.drawImage(img, 0, 0);
-  img.style.display = ‘none’;
-  var zoomctx = document.getElementById(‘zoom’).getContext(‘2d’);</p>
+<span class="kd">function</span> <span class="nx">draw</span><span class="p">(</span><span class="nx">img</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'canvas'</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">img</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="nx">img</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">'none'</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">zoomctx</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'zoom'</span><span class="p">).</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
+ 
+  <span class="kd">var</span> <span class="nx">smoothbtn</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'smoothbtn'</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">toggleSmoothing</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">zoomctx</span><span class="p">.</span><span class="nx">imageSmoothingEnabled</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">checked</span><span class="p">;</span>
+    <span class="nx">zoomctx</span><span class="p">.</span><span class="nx">mozImageSmoothingEnabled</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">checked</span><span class="p">;</span>
+    <span class="nx">zoomctx</span><span class="p">.</span><span class="nx">webkitImageSmoothingEnabled</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">checked</span><span class="p">;</span>
+    <span class="nx">zoomctx</span><span class="p">.</span><span class="nx">msImageSmoothingEnabled</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">checked</span><span class="p">;</span>
+  <span class="p">};</span>
+  <span class="nx">smoothbtn</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'change'</span><span class="p">,</span> <span class="nx">toggleSmoothing</span><span class="p">);</span>
 
-<p>var smoothbtn = document.getElementById(‘smoothbtn’);
-  var toggleSmoothing = function(event) {
-    zoomctx.imageSmoothingEnabled = this.checked;
-    zoomctx.mozImageSmoothingEnabled = this.checked;
-    zoomctx.webkitImageSmoothingEnabled = this.checked;
-    zoomctx.msImageSmoothingEnabled = this.checked;
-  };
-  smoothbtn.addEventListener(‘change’, toggleSmoothing);</p>
+  <span class="kd">var</span> <span class="nx">zoom</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">layerX</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">layerY</span><span class="p">;</span>
+    <span class="nx">zoomctx</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">canvas</span><span class="p">,</span>
+                      <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">x</span> <span class="o">-</span> <span class="mi">5</span><span class="p">),</span>
+                      <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">y</span> <span class="o">-</span> <span class="mi">5</span><span class="p">),</span>
+                      <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span>
+                      <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+                      <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
+  <span class="p">};</span>
 
-<p>var zoom = function(event) {
-    var x = event.layerX;
-    var y = event.layerY;
-    zoomctx.drawImage(canvas,
-                      Math.abs(x - 5),
-                      Math.abs(y - 5),
-                      10, 10,
-                      0, 0,
-                      200, 200);
-  };</p>
+  <span class="nx">canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'mousemove'</span><span class="p">,</span> <span class="nx">zoom</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
-<p>canvas.addEventListener(‘mousemove’, zoom);
-}
-```</p>
-
-<h1 id="section-6">保存图片</h1>
+<h1 id="保存图片">保存图片</h1>
 <p>HTMLCanvasElement  提供一个 toDataURL() 方法，此方法在保存图片的时候非常有用。
 它返回一个包含被类型参数规定的图像表现格式的数据链接。
 返回的图片分辨率是96dpi。</p>

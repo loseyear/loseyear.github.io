@@ -7,11 +7,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Canvas Transformations</title>
-  <meta name="description" content="状态的保存和恢复在了解变形之前，我先介绍一下两个在你开始绘制复杂图形就必不可少的方法。jssave()restore()save 和 restore 方法是用来保存和恢复 canvas 状态的，都没有参数。Canvas 的状态就是当前画面应用的所有样式和变形的一个快照。">
+  <meta name="description" content="状态的保存和恢复在了解变形之前，我先介绍一下两个在你开始绘制复杂图形就必不可少的方法。save()restore()save 和 restore 方法是用来保存和恢复 canvas 状态的，都没有参数。Canvas 的状态就是当前画面应用的所有样式和变形的一个快照。">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="/canvas/2015/10/10/canvas-Transformations/">
-  <link rel="alternate" type="application/rss+xml" title="抠钉" href="/feed.xml" />
+  <link rel="canonical" href="http://localhost:4000/canvas/2015/10/10/canvas-Transformations/">
+  <link rel="alternate" type="application/rss+xml" title="抠钉" href="http://localhost:4000/feed.xml" />
 </head>
 
 
@@ -47,11 +47,14 @@
           
         
           
+        
+          
           <a class="page-link" href="/tags/">Tags</a>
           
         
           <a class="page-link" href="/canvas/">canvas</a>
           <a class="page-link" href="/tips/">tips</a>
+          <a class="page-link" href="/cli/">cli</a>
       </div>
     </nav>
 
@@ -70,114 +73,112 @@
   </header>
 
   <article class="post-content">
-    <h1 id="section">状态的保存和恢复</h1>
-<p>在了解变形之前，我先介绍一下两个在你开始绘制复杂图形就必不可少的方法。
-<code>js
-save()
-restore()
-</code>
-save 和 restore 方法是用来保存和恢复 canvas 状态的，都没有参数。
+    <h1 id="状态的保存和恢复">状态的保存和恢复</h1>
+<p>在了解变形之前，我先介绍一下两个在你开始绘制复杂图形就必不可少的方法。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">save</span><span class="p">()</span>
+<span class="nx">restore</span><span class="p">()</span>
+</code></pre></div></div>
+<p>save 和 restore 方法是用来保存和恢复 canvas 状态的，都没有参数。
 Canvas 的状态就是当前画面应用的所有样式和变形的一个快照。</p>
 
 <p>Canvas 状态是以堆(stack)的方式保存的，每一次调用 save 方法，当前的状态就会被推入堆中保存起来。
-这种状态包括：
-&gt; * 当前应用的变形（即移动，旋转和缩放，见下）
-* strokeStyle, fillStyle, globalAlpha, lineWidth, lineCap, lineJoin, miterLimit, shadowOffsetX, shadowOffsetY, shadowBlur, shadowColor, globalCompositeOperation 的值
-* 当前的裁切路径（clipping path），会在下一节介绍</p>
+这种状态包括：</p>
+<blockquote>
+  <ul>
+    <li>当前应用的变形（即移动，旋转和缩放，见下）</li>
+    <li>strokeStyle, fillStyle, globalAlpha, lineWidth, lineCap, lineJoin, miterLimit, shadowOffsetX, shadowOffsetY, shadowBlur, shadowColor, globalCompositeOperation 的值</li>
+    <li>当前的裁切路径（clipping path），会在下一节介绍</li>
+  </ul>
+</blockquote>
 
 <p>你可以调用任意多次 save 方法。
 每一次调用 restore 方法，上一个保存的状态就从堆中弹出，所有设定都恢复。</p>
 
-<h1 id="save--restore-">save 和 restore 的应用例子</h1>
+<h1 id="save-和-restore-的应用例子">save 和 restore 的应用例子</h1>
 <ul>
   <li>我们尝试用这个连续矩形的例子来描述 canvas 的状态堆是如何工作的。</li>
   <li>第一步是用默认设置画一个大四方形，然后保存一下状态。改变填充颜色画第二个小一点的蓝色四方形，然后再保存一下状态。再次改变填充颜色绘制更小一点的半透明的白色四方形。</li>
   <li>到目前为止所做的动作和前面章节的都很类似。不过一旦我们调用 restore，状态堆中最后的状态会弹出，并恢复所有设置。如果不是之前用 save 保存了状态，那么我们就需要手动改变设置来回到前一个状态，这个对于两三个属性的时候还是适用的，一旦多了，我们的代码将会猛涨。</li>
-  <li>
-    <p>当第二次调用 restore 时，已经恢复到最初的状态，因此最后是再一次绘制出一个黑色的四方形。
-```js
-function draw() {
-var ctx = document.getElementById(‘canvas’).getContext(‘2d’);</p>
+  <li>当第二次调用 restore 时，已经恢复到最初的状态，因此最后是再一次绘制出一个黑色的四方形。
+    <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'canvas'</span><span class="p">).</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
 
-    <p>ctx.fillRect(0,0,150,150);   // Draw a rectangle with default settings
-ctx.save();                  // Save the default state</p>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">150</span><span class="p">,</span><span class="mi">150</span><span class="p">);</span>   <span class="c1">// Draw a rectangle with default settings</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">save</span><span class="p">();</span>                  <span class="c1">// Save the default state</span>
 
-    <p>ctx.fillStyle = ‘#09F’       // Make changes to the settings
-ctx.fillRect(15,15,120,120); // Draw a rectangle with new settings</p>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s1">'#09F'</span>       <span class="c1">// Make changes to the settings</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="mi">120</span><span class="p">);</span> <span class="c1">// Draw a rectangle with new settings</span>
 
-    <p>ctx.save();                  // Save the current state
-ctx.fillStyle = ‘#FFF’       // Make changes to the settings
-ctx.globalAlpha = 0.5;  <br />
-ctx.fillRect(30,30,90,90);   // Draw a rectangle with new settings</p>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">save</span><span class="p">();</span>                  <span class="c1">// Save the current state</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s1">'#FFF'</span>       <span class="c1">// Make changes to the settings</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">globalAlpha</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">;</span>    
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">90</span><span class="p">,</span><span class="mi">90</span><span class="p">);</span>   <span class="c1">// Draw a rectangle with new settings</span>
 
-    <p>ctx.restore();               // Restore previous state
-ctx.fillRect(45,45,60,60);   // Draw a rectangle with restored settings</p>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">restore</span><span class="p">();</span>               <span class="c1">// Restore previous state</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">45</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">60</span><span class="p">);</span>   <span class="c1">// Draw a rectangle with restored settings</span>
 
-    <p>ctx.restore();               // Restore original state
-ctx.fillRect(60,60,30,30);   // Draw a rectangle with restored settings
-}
-```</p>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">restore</span><span class="p">();</span>               <span class="c1">// Restore original state</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">30</span><span class="p">);</span>   <span class="c1">// Draw a rectangle with restored settings</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
   </li>
 </ul>
 
-<h1 id="translating">移动 Translating</h1>
-<p>我们先介绍 translate 方法，它用来移动 canvas 和它的原点到一个不同的位置。
-<code>js
-translate(x, y)
-</code>
-translate 方法接受两个参数。x 是左右偏移量，y 是上下偏移量，如右图所示。</p>
+<h1 id="移动-translating">移动 Translating</h1>
+<p>我们先介绍 translate 方法，它用来移动 canvas 和它的原点到一个不同的位置。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">translate</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span>
+</code></pre></div></div>
+<p>translate 方法接受两个参数。x 是左右偏移量，y 是上下偏移量，如右图所示。</p>
 
 <p>在做变形之前先保存状态是一个良好的习惯。大多数情况下，调用 restore 方法比手动恢复原先的状态要简单得多。
 又，如果你是在一个循环中做位移但没有保存和恢复 canvas 的状态，很可能到最后会发现怎么有些东西不见了，那是因为它很可能已经超出 canvas 范围以外了。</p>
 
-<h2 id="translate-">translate 的例子</h2>
+<h2 id="translate-的例子">translate 的例子</h2>
 <p>这个例子显示了一些移动 canvas 原点的好处。我创建了一个 drawSpirograph 方法用来绘制螺旋（spirograph）图案，那是围绕原点绘制出来的。
 如果不使用 translate 方法，那么只能看见其中的四分之一。
 translate 同时让我可以任意放置这些图案，而不需要在 spirograph 方法中手工调整坐标值，既好理解也方便使用。</p>
 
-<p>我在 draw 方法中调用 drawSpirograph 方法 9 次，用了 2 层循环。每一次循环，先移动 canvas ，画螺旋图案，然后恢复早原始状态。
-<code>js
-function draw() {
-  var ctx = document.getElementById('canvas').getContext('2d');
-  ctx.fillRect(0,0,300,300);
-  for (var i=0;i&lt;3;i++) {
-    for (var j=0;j&lt;3;j++) {
-      ctx.save();
-      ctx.strokeStyle = "#9CFF00";
-      ctx.translate(50+j*100,50+i*100);
-      drawSpirograph(ctx,20*(j+2)/(j+1),-8*(i+3)/(i+1),10);
-      ctx.restore();
-    }
-  }
-}
-function drawSpirograph(ctx,R,r,O){
-  var x1 = R-O;
-  var y1 = 0;
-  var i  = 1;
-  ctx.beginPath();
-  ctx.moveTo(x1,y1);
-  do {
-    if (i&gt;20000) break;
-    var x2 = (R+r)*Math.cos(i*Math.PI/72) - (r+O)*Math.cos(((R+r)/r)*(i*Math.PI/72))
-    var y2 = (R+r)*Math.sin(i*Math.PI/72) - (r+O)*Math.sin(((R+r)/r)*(i*Math.PI/72))
-    ctx.lineTo(x2,y2);
-    x1 = x2;
-    y1 = y2;
-    i++;
-  } while (x2 != R-O &amp;&amp; y2 != 0 );
-  ctx.stroke();
-}
-</code></p>
+<p>我在 draw 方法中调用 drawSpirograph 方法 9 次，用了 2 层循环。每一次循环，先移动 canvas ，画螺旋图案，然后恢复早原始状态。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'canvas'</span><span class="p">).</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span><span class="mi">300</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">j</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">;</span><span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">ctx</span><span class="p">.</span><span class="nx">save</span><span class="p">();</span>
+      <span class="nx">ctx</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="s2">"#9CFF00"</span><span class="p">;</span>
+      <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="mi">50</span><span class="o">+</span><span class="nx">j</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span><span class="mi">50</span><span class="o">+</span><span class="nx">i</span><span class="o">*</span><span class="mi">100</span><span class="p">);</span>
+      <span class="nx">drawSpirograph</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="p">(</span><span class="nx">j</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">j</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="o">-</span><span class="mi">8</span><span class="o">*</span><span class="p">(</span><span class="nx">i</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="mi">10</span><span class="p">);</span>
+      <span class="nx">ctx</span><span class="p">.</span><span class="nx">restore</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">drawSpirograph</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="nx">R</span><span class="p">,</span><span class="nx">r</span><span class="p">,</span><span class="nx">O</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">x1</span> <span class="o">=</span> <span class="nx">R</span><span class="o">-</span><span class="nx">O</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">y1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">i</span>  <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span><span class="nx">x1</span><span class="p">,</span><span class="nx">y1</span><span class="p">);</span>
+  <span class="k">do</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">i</span><span class="o">&gt;</span><span class="mi">20000</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">x2</span> <span class="o">=</span> <span class="p">(</span><span class="nx">R</span><span class="o">+</span><span class="nx">r</span><span class="p">)</span><span class="o">*</span><span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nx">i</span><span class="o">*</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">/</span><span class="mi">72</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="nx">r</span><span class="o">+</span><span class="nx">O</span><span class="p">)</span><span class="o">*</span><span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(((</span><span class="nx">R</span><span class="o">+</span><span class="nx">r</span><span class="p">)</span><span class="o">/</span><span class="nx">r</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">i</span><span class="o">*</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">/</span><span class="mi">72</span><span class="p">))</span>
+    <span class="kd">var</span> <span class="nx">y2</span> <span class="o">=</span> <span class="p">(</span><span class="nx">R</span><span class="o">+</span><span class="nx">r</span><span class="p">)</span><span class="o">*</span><span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">i</span><span class="o">*</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">/</span><span class="mi">72</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="nx">r</span><span class="o">+</span><span class="nx">O</span><span class="p">)</span><span class="o">*</span><span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(((</span><span class="nx">R</span><span class="o">+</span><span class="nx">r</span><span class="p">)</span><span class="o">/</span><span class="nx">r</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">i</span><span class="o">*</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">/</span><span class="mi">72</span><span class="p">))</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">(</span><span class="nx">x2</span><span class="p">,</span><span class="nx">y2</span><span class="p">);</span>
+    <span class="nx">x1</span> <span class="o">=</span> <span class="nx">x2</span><span class="p">;</span>
+    <span class="nx">y1</span> <span class="o">=</span> <span class="nx">y2</span><span class="p">;</span>
+    <span class="nx">i</span><span class="o">++</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="nx">x2</span> <span class="o">!=</span> <span class="nx">R</span><span class="o">-</span><span class="nx">O</span> <span class="o">&amp;&amp;</span> <span class="nx">y2</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">stroke</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
-<h1 id="rotating">旋转 Rotating</h1>
-<p>第二个介绍 rotate 方法，它用于以原点为中心旋转 canvas。
-<code>js
-rotate(angle)
-</code>
-这个方法只接受一个参数：旋转的角度(angle)，它是顺时针方向的，以弧度为单位的值。
+<h1 id="旋转-rotating">旋转 Rotating</h1>
+<p>第二个介绍 rotate 方法，它用于以原点为中心旋转 canvas。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">rotate</span><span class="p">(</span><span class="nx">angle</span><span class="p">)</span>
+</code></pre></div></div>
+<p>这个方法只接受一个参数：旋转的角度(angle)，它是顺时针方向的，以弧度为单位的值。
 旋转的中心点始终是 canvas 的原点，如果要改变它，我们需要用到 translate 方法。</p>
 
-<h2 id="rotate-">rotate 的例子</h2>
+<h2 id="rotate-的例子">rotate 的例子</h2>
 
 <p>在这个例子里，见右图，我用 rotate 方法来画圆并构成圆形图案。
 当然你也可以分别计算出 x 和 y 坐标(x = r<em>Math.cos(a); y = r</em>Math.sin(a))。
@@ -192,32 +193,32 @@ rotate(angle)
 最里层的环有 6 个圆点，这样，每次旋转的夹角就是 360/6 = 60 度。
 往外每一环的圆点数目是里面一环的 2 倍，那么每次旋转的夹角随之减半。</p>
 
-<p>```js
-function draw() {
-  var ctx = document.getElementById(‘canvas’).getContext(‘2d’);
-  ctx.translate(75,75);</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'canvas'</span><span class="p">).</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="mi">75</span><span class="p">,</span><span class="mi">75</span><span class="p">);</span>
 
-<p>for (var i=1;i&lt;6;i++){ // Loop through rings (from inside to out)
-    ctx.save();
-    ctx.fillStyle = ‘rgb(‘+(51<em>i)+’,’+(255-51</em>i)+’,255)’;</p>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="mi">6</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">){</span> <span class="c1">// Loop through rings (from inside to out)</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">save</span><span class="p">();</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s1">'rgb('</span><span class="o">+</span><span class="p">(</span><span class="mi">51</span><span class="o">*</span><span class="nx">i</span><span class="p">)</span><span class="o">+</span><span class="s1">','</span><span class="o">+</span><span class="p">(</span><span class="mi">255</span><span class="o">-</span><span class="mi">51</span><span class="o">*</span><span class="nx">i</span><span class="p">)</span><span class="o">+</span><span class="s1">',255)'</span><span class="p">;</span>
 
-<pre><code>for (var j=0;j&lt;i*6;j++){ // draw individual dots
-  ctx.rotate(Math.PI*2/(i*6));
-  ctx.beginPath();
-  ctx.arc(0,i*12.5,5,0,Math.PI*2,true);
-  ctx.fill();
-}
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">j</span><span class="o">&lt;</span><span class="nx">i</span><span class="o">*</span><span class="mi">6</span><span class="p">;</span><span class="nx">j</span><span class="o">++</span><span class="p">){</span> <span class="c1">// draw individual dots</span>
+      <span class="nx">ctx</span><span class="p">.</span><span class="nx">rotate</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">*</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="nx">i</span><span class="o">*</span><span class="mi">6</span><span class="p">));</span>
+      <span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
+      <span class="nx">ctx</span><span class="p">.</span><span class="nx">arc</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">i</span><span class="o">*</span><span class="mf">12.5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span>
+      <span class="nx">ctx</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
+    <span class="p">}</span>
 
-ctx.restore();   } } ```
-</code></pre>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">restore</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
-<h1 id="scaling">缩放 Scaling</h1>
+<h1 id="缩放-scaling">缩放 Scaling</h1>
 
-<p>接着是缩放。我们用它来增减图形在 canvas 中的像素数目，对形状，位图进行缩小或者放大。
-<code>js
-scale(x, y)
-</code>
-scale 方法接受两个参数。
+<p>接着是缩放。我们用它来增减图形在 canvas 中的像素数目，对形状，位图进行缩小或者放大。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">scale</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span>
+</code></pre></div></div>
+<p>scale 方法接受两个参数。
 x,y 分别是横轴和纵轴的缩放因子，它们都必须是正值。
 值比 1.0 小表示缩小，比 1.0 大则表示放大，值为 1.0 时什么效果都没有。</p>
 
@@ -225,7 +226,7 @@ x,y 分别是横轴和纵轴的缩放因子，它们都必须是正值。
 举例说，如果我们设置缩放因子是 0.5，1 个单位就变成对应 0.5 个像素，这样绘制出来的形状就会是原先的一半。
 同理，设置为 2.0 时，1 个单位就对应变成了 2 像素，绘制的结果就是图形放大了 2 倍。</p>
 
-<h2 id="scale-">scale 的例子</h2>
+<h2 id="scale-的例子">scale 的例子</h2>
 
 <p>这最后的例子里，我再次启用前面曾经用过的 spirograph 方法，来画 9 个图形，分别赋予不同的缩放因子。
 左上角的图形是未经缩放的。
@@ -235,101 +236,97 @@ x,y 分别是横轴和纵轴的缩放因子，它们都必须是正值。
 <p>第二行蓝色图案堆垂直方向应用了不统一的缩放因子，每个图形 x 方向上的缩放因子都是 1.0，意味着不缩放，而 y 方向缩放因子是 0.75，得出来的结果是，图案被依次压扁了。
 原来的圆形图案变成了椭圆，如果细心观察，还可以发现在垂直方向上的线宽也减少了。</p>
 
-<p>第三行的绿色图案与第二行类似，只是缩放限定在横轴方向上了。
-```js
-function draw() {
-  var ctx = document.getElementById(‘canvas’).getContext(‘2d’);
-  ctx.strokeStyle = “#fc0”;
-  ctx.lineWidth = 1.5;
-  ctx.fillRect(0,0,300,300);</p>
+<p>第三行的绿色图案与第二行类似，只是缩放限定在横轴方向上了。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'canvas'</span><span class="p">).</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="s2">"#fc0"</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">lineWidth</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span><span class="mi">300</span><span class="p">);</span>
 
-<p>// Uniform scaling
-  ctx.save()
-  ctx.translate(50,50);
-  drawSpirograph(ctx,22,6,5);  // no scaling</p>
+  <span class="c1">// Uniform scaling</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">save</span><span class="p">()</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">);</span>
+  <span class="nx">drawSpirograph</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span>  <span class="c1">// no scaling</span>
 
-<p>ctx.translate(100,0);
-  ctx.scale(0.75,0.75);
-  drawSpirograph(ctx,22,6,5);</p>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="mf">0.75</span><span class="p">,</span><span class="mf">0.75</span><span class="p">);</span>
+  <span class="nx">drawSpirograph</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span>
 
-<p>ctx.translate(133.333,0);
-  ctx.scale(0.75,0.75);
-  drawSpirograph(ctx,22,6,5);
-  ctx.restore();</p>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="mf">133.333</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="mf">0.75</span><span class="p">,</span><span class="mf">0.75</span><span class="p">);</span>
+  <span class="nx">drawSpirograph</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">restore</span><span class="p">();</span>
 
-<p>// Non-uniform scaling (y direction)
-  ctx.strokeStyle = “#0cf”;
-  ctx.save()
-  ctx.translate(50,150);
-  ctx.scale(1,0.75);
-  drawSpirograph(ctx,22,6,5);</p>
+  <span class="c1">// Non-uniform scaling (y direction)</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="s2">"#0cf"</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">save</span><span class="p">()</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">150</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.75</span><span class="p">);</span>
+  <span class="nx">drawSpirograph</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span>
 
-<p>ctx.translate(100,0);
-  ctx.scale(1,0.75);
-  drawSpirograph(ctx,22,6,5);</p>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.75</span><span class="p">);</span>
+  <span class="nx">drawSpirograph</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span>
 
-<p>ctx.translate(100,0);
-  ctx.scale(1,0.75);
-  drawSpirograph(ctx,22,6,5);
-  ctx.restore();</p>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.75</span><span class="p">);</span>
+  <span class="nx">drawSpirograph</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">restore</span><span class="p">();</span>
 
-<p>// Non-uniform scaling (x direction)
-  ctx.strokeStyle = “#cf0”;
-  ctx.save()
-  ctx.translate(50,250);
-  ctx.scale(0.75,1);
-  drawSpirograph(ctx,22,6,5);</p>
+  <span class="c1">// Non-uniform scaling (x direction)</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="s2">"#cf0"</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">save</span><span class="p">()</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">250</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="mf">0.75</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+  <span class="nx">drawSpirograph</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span>
 
-<p>ctx.translate(133.333,0);
-  ctx.scale(0.75,1);
-  drawSpirograph(ctx,22,6,5);</p>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="mf">133.333</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="mf">0.75</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+  <span class="nx">drawSpirograph</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span>
 
-<p>ctx.translate(177.777,0);
-  ctx.scale(0.75,1);
-  drawSpirograph(ctx,22,6,5);
-  ctx.restore();</p>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="mf">177.777</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">scale</span><span class="p">(</span><span class="mf">0.75</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+  <span class="nx">drawSpirograph</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">restore</span><span class="p">();</span>
+  
+<span class="p">}</span>
+</code></pre></div></div>
 
-<p>}
-```</p>
-
-<h1 id="transforms">变形 Transforms</h1>
-<p>最后一个方法是允许直接对变形矩阵作修改。
-<code>js
-transform(m11, m12, m21, m22, dx, dy)
-</code>
-这个方法必须将当前的变形矩阵乘上下面的矩阵：
+<h1 id="变形-transforms">变形 Transforms</h1>
+<p>最后一个方法是允许直接对变形矩阵作修改。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">transform</span><span class="p">(</span><span class="nx">m11</span><span class="p">,</span> <span class="nx">m12</span><span class="p">,</span> <span class="nx">m21</span><span class="p">,</span> <span class="nx">m22</span><span class="p">,</span> <span class="nx">dx</span><span class="p">,</span> <span class="nx">dy</span><span class="p">)</span>
+</code></pre></div></div>
+<p>这个方法必须将当前的变形矩阵乘上下面的矩阵：
 | m11 | m21 | dx |
 | — | — | – |
 | m12 | m22 | dy |
 | 0   |	0   | 1  |</p>
 
-<p>如果任意一个参数是无限大，变形矩阵也必须被标记为无限大，否则会抛出异常。
-<code>js
-setTransform(m11, m12, m21, m22, dx, dy)
-</code></p>
+<p>如果任意一个参数是无限大，变形矩阵也必须被标记为无限大，否则会抛出异常。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">setTransform</span><span class="p">(</span><span class="nx">m11</span><span class="p">,</span> <span class="nx">m12</span><span class="p">,</span> <span class="nx">m21</span><span class="p">,</span> <span class="nx">m22</span><span class="p">,</span> <span class="nx">dx</span><span class="p">,</span> <span class="nx">dy</span><span class="p">)</span>
+</code></pre></div></div>
 
-<p>这个方法必须重置当前的变形矩阵为单位矩阵，然后以相同的参数调用 transform 方法。如果任意一个参数是无限大，那么变形矩阵也必须被标记为无限大，否则会抛出异常。
-```js
-function draw() {
-  var canvas = document.getElementById(“canvas”);
-  var ctx = canvas.getContext(“2d”);</p>
+<p>这个方法必须重置当前的变形矩阵为单位矩阵，然后以相同的参数调用 transform 方法。如果任意一个参数是无限大，那么变形矩阵也必须被标记为无限大，否则会抛出异常。</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"canvas"</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">"2d"</span><span class="p">);</span>
 
-<p>var sin = Math.sin(Math.PI/6);
-  var cos = Math.cos(Math.PI/6);
-  ctx.translate(200, 200);
-  var c = 0;
-  for (var i=0; i &lt;= 12; i++) {
-    c = Math.floor(255 / 12 * i);
-    ctx.fillStyle = “rgb(“ + c + “,” + c + “,” + c + “)”;
-    ctx.fillRect(0, 0, 100, 10);
-    ctx.transform(cos, sin, -sin, cos, 0, 0);
-  }</p>
-
-<p>ctx.setTransform(-1, 0, 0, 1, 200, 200);
-  ctx.fillStyle = “rgba(255, 128, 255, 0.5)”;
-  ctx.fillRect(0, 50, 100, 100);
-}
-```</p>
+  <span class="kd">var</span> <span class="nx">sin</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">/</span><span class="mi">6</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">cos</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">/</span><span class="mi">6</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">12</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">c</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="mi">255</span> <span class="o">/</span> <span class="mi">12</span> <span class="o">*</span> <span class="nx">i</span><span class="p">);</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">"rgb("</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="s2">","</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="s2">","</span> <span class="o">+</span> <span class="nx">c</span> <span class="o">+</span> <span class="s2">")"</span><span class="p">;</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">transform</span><span class="p">(</span><span class="nx">cos</span><span class="p">,</span> <span class="nx">sin</span><span class="p">,</span> <span class="o">-</span><span class="nx">sin</span><span class="p">,</span> <span class="nx">cos</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="p">}</span>
+  
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">setTransform</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">"rgba(255, 128, 255, 0.5)"</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
   </article>
 
