@@ -1,9 +1,0 @@
-# Site settings
-title: 牙牙远远呓语
-baseurl: "" # the subpath of your site, e.g. /blog/
-
-# Build settings
-markdown: kramdown
-
-# relative_permalinks: true
-permalink: pretty
