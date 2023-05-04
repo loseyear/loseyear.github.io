@@ -7,8 +7,6 @@ import { ThemeProvider } from '@mui/material/styles'
 import GlobalStyles from '@/theme/GlobalStyles'
 import theme from '@/theme/theme'
 
-import './style.css'
-
 const HomePage = lazy(() => import('@/pages/HomePage/HomePage'))
 const ResizablePanels = lazy(() => import('@/pages/ResizablePanels/ResizablePanels'))
 const JavaScript = lazy(() => import('@/pages/JavaScript/JavaScript'))
