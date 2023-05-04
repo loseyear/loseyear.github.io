@@ -27,7 +27,7 @@ const GlobalStyles = () => (
       html: {
         width: '100%',
         height: '100%',
-        backgroundColor: 'var(--color-background-default)',
+        // backgroundColor: 'var(--color-background-default)',
         color: 'var(--color-default)',
       },
       body: {
