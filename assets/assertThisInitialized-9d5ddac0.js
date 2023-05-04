@@ -1,0 +1,1 @@
+function t(e,o){return(t=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(t,e){return t.__proto__=e,t})(e,o)}function e(e,o){e.prototype=Object.create(o.prototype),e.prototype.constructor=e,t(e,o)}function o(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}export{e as _,o as a};
