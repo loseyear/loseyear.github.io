@@ -10,7 +10,8 @@ import theme from '@/theme/theme'
 import './style.css'
 
 const HomePage = lazy(() => import('@/pages/HomePage/HomePage'))
-const ResizablePanelsPage = lazy(() => import('@/pages/ResizablePanelsPage/ResizablePanelsPage'))
+const ResizablePanels = lazy(() => import('@/pages/ResizablePanels/ResizablePanels'))
+const JavaScript = lazy(() => import('@/pages/JavaScript/JavaScript'))
 const ErrorPage = lazy(() => import('@/pages/ErrorPage/ErrorPage'))
 const Loading = lazy(() => import('@/pages/ErrorPage/ErrorPage'))
 
@@ -27,8 +28,12 @@ function App() {
                 name: 'home',
               },
               {
-                link: '/resizable-panels',
-                name: 'resizable-panels',
+                link: '/ResizablePanels',
+                name: 'ResizablePanels',
+              },
+              {
+                link: '/JavaScript',
+                name: 'JavaScript',
               },
             ].map(
               v => (
@@ -42,7 +47,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="home" />} />
           <Route path="/home" element={<Suspense fallback={<Loading />}><HomePage /></Suspense>} />
-          <Route path="/resizable-panels" element={<Suspense fallback={<Loading />}><ResizablePanelsPage /></Suspense>} />
+          <Route path="/ResizablePanels" element={<Suspense fallback={<Loading />}><ResizablePanels /></Suspense>} />
+          <Route path="/JavaScript" element={<Suspense fallback={<Loading />}><JavaScript /></Suspense>} />
           <Route path="*" element={<Suspense fallback={<Loading />}><ErrorPage /></Suspense>} />
         </Routes>
       </ThemeProvider>
