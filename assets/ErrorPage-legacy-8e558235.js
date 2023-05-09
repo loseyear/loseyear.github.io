@@ -1,0 +1,1 @@
+System.register(["./index-legacy-580a2654.js"],(function(e,n){"use strict";var r,t;return{setters:[function(e){r=e.u,t=e.j}],execute:function(){e("default",(function(){var e=r();return t.jsxs("div",{children:[t.jsx("h1",{children:"Error Page !!!"}),t.jsx("div",{onClick:function(){return e("/")},children:"返回首页"})]})}))}}}));

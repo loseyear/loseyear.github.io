@@ -1,0 +1,1 @@
+import{u as r,j as s}from"./index-9cd783a2.js";const e=()=>{const e=r();return s.jsxs("div",{children:[s.jsx("h1",{children:"Error Page !!!"}),s.jsx("div",{onClick:()=>e("/"),children:"返回首页"})]})};export{e as default};
