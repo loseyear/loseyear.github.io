@@ -40,7 +40,7 @@
     "sass": "^1.62.1",
     "terser": "^5.16.9",
     "typescript": "^5.0.4",
-    "vite": "^4.3.4",
+    "vite": "^4.3.9",
     "vite-plugin-eslint": "^1.8.1"
   }
 }
